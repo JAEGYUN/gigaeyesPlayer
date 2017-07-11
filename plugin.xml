@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="kr.co.anylogic.myoverlay" version="1.0.0">
+   <name>GigaeyesPlayer</name>
+   <js-module name="GigaeyesPlayer" src="www/gigaeyesplayer.js">
+      <clobbers target="cordova.plugins.gigaeyesplayer" />
+   </js-module>
+   <platform name="android">
+      <config-file parent="/*" target="res/xml/config.xml">
+         <feature name="GigaeyesPlayer">
+            <param name="android-package" value="kr.co.anylogic.myoverlay" />
+         </feature>
+      </config-file>
+      <config-file parent="/*" target="AndroidManifest.xml">
+         <uses-permission android:name="android.permission.INTERNET" />
+         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+         <uses-permission android:name="android.permission.WAKE_LOCK" />
+         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+         <uses-permission android:name="android.permission.RECORD_AUDIO" />
+         <uses-permission android:name="android.permission.CAMERA" />
+      </config-file>
+       <config-file target="AndroidManifest.xml" parent="/manifest/application">
+        <activity android:name="kr.co.anylogic.myoverlay.GigaeyesActivity"></activity>
+      </config-file>
+      <source-file src="src/android/res/drawable/btn_back3.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_arrow_left.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_arrow_leftright.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_cameraoff.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_cameraon.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_capture.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_door.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_fire.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_humidity.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_iot.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_red_in.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_red_out.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_sound.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_star_off.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_star.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_temperature.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_theft.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_va.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/images.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/starbutton.xml" target-dir="res/drawable" />
+      <source-file src="src/android/res/layout/activity_main.xml" target-dir="res/layout" />
+      <source-file src="src/android/res/layout/back.xml" target-dir="res/layout" />
+      <source-file src="src/android/res/layout/iot.xml" target-dir="res/layout" />
+      <source-file src="src/android/res/layout/over.xml" target-dir="res/layout" />
+      <source-file src="src/android/res/layout/va.xml" target-dir="res/layout" />
+      <source-file src="src/android/VRViewW.java" target-dir="src/kr/co/anylogic/myoverlay" />
+      <source-file src="src/android/GigaeyesPlayer.java" target-dir="src/kr/co/anylogic/myoverlay" />
+      <source-file src="src/android/GigaeyesActivity.java" target-dir="src/kr/co/anylogic/myoverlay" />
+   </platform>
+</plugin>
