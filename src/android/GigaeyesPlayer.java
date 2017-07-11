@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import kr.co.anylogic.myoverlay.GigaeyesConstants;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -53,9 +54,6 @@ public class GigaeyesPlayer extends CordovaPlugin {
         int ico_star = res.getIdentifier("ico_star", "drawable", package_name);
         int ico_star_off = res.getIdentifier("ico_star_off", "drawable", package_name);
 
-        int ico_cameraon = res.getIdentifier("ico_humidity", "drawable", package_name);
-        int ico_cameraon = res.getIdentifier("ico_humidity", "drawable", package_name);
-        
         int camName = res.getIdentifier("camName", "id", package_name);
      
 
@@ -98,8 +96,8 @@ public class GigaeyesPlayer extends CordovaPlugin {
             intent.putExtra("ico_star", ico_star);
             intent.putExtra("ico_star_off", ico_star_off);
 
-            intent.putExtra("image_view", image_view);
-            intent.putExtra("video_view", video_view);
+            // intent.putExtra("image_view", image_view);
+            // intent.putExtra("video_view", video_view);
             Log.d("FLP", "Adicionaod extra: " + videoUrl);
             cordova.startActivityForResult(this, intent, 0);
             return true;
@@ -121,12 +119,17 @@ public class GigaeyesPlayer extends CordovaPlugin {
     /**
      * 즐겨찾기
      */
-    static void setFavrorites(Context content) {
+    static void setFavorites(Context content, boolean status) {
 //        Toast.makeText(content,"JoystickHandlerActivity move: UP",Toast.LENGTH_SHORT).show();
         if(callbackContext != null){
             JSONObject obj = new JSONObject();
             obj.put("type","favorites");
             obj.put("camId",GigaeyesPlayer.camId);
+            String recStatus = GigaeyesConstants.FAVORITES_ON;
+            if(!status){
+                recStatus = GigaeyesConstants.FAVORITES_OFF;
+            }
+            obj.put("action", recStatus);
             PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, obj);
             pluginResult.setKeepCallback(true);
             callbackContext.sendPluginResult(pluginResult);

@@ -724,15 +724,18 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
 
     }
     void clickBtn6(){
-        Toast.makeText(this, "clickBtn6 Clicked!! 즐겨찾기를 설정합니다.", Toast.LENGTH_LONG).show();
+       
 
         ImageButton btnStar = (ImageButton)findViewById(btn_star);
         if(favFlag) {
             btnStar.setImageResource(ico_star_off);
+            Toast.makeText(this, "clickBtn6 Clicked!! 즐겨찾기를 해제합니다.", Toast.LENGTH_LONG).show();
+            GigaeyesPlayer.setFavoritess(getApplicationContext(), false);
         }else{
+            Toast.makeText(this, "clickBtn6 Clicked!! 즐겨찾기를 설정합니다.", Toast.LENGTH_LONG).show();
             btnStar.setImageResource(ico_star);
+            GigaeyesPlayer.setFavorites(getApplicationContext(), true);
         }
-
         favFlag = !favFlag;
     }
 
