@@ -41,10 +41,10 @@
       <source-file src="src/android/res/drawable/ico_va.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/images.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/starbutton.xml" target-dir="res/drawable" />
-      <source-file src="src/android/res/layout/activity_main.xml" target-dir="res/layout" />
+      <source-file src="src/android/res/layout/gigaeyes_activity_main.xml" target-dir="res/layout" />
       <source-file src="src/android/res/layout/back.xml" target-dir="res/layout" />
       <source-file src="src/android/res/layout/iot.xml" target-dir="res/layout" />
-      <source-file src="src/android/res/layout/over.xml" target-dir="res/layout" />
+      <source-file src="src/android/res/layout/play_overlay.xml" target-dir="res/layout" />
       <source-file src="src/android/res/layout/va.xml" target-dir="res/layout" />
       <source-file src="src/android/VRViewW.java" target-dir="src/kr/co/anylogic/myoverlay" />
       <source-file src="src/android/GigaeyesPlayer.java" target-dir="src/kr/co/anylogic/myoverlay" />
