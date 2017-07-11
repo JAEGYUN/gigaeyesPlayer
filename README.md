@@ -34,7 +34,7 @@ dependencies {
 
 ``` javascript
 
-cordova.plugins.gigaeyesplayer.play("rtsp://10.0.0.100:554/video", 'cam_01', '2층 복도', 'on', callbackSucces, callbackError);
+cordova.plugins.gigaeyesplayer.play("rtsp://10.0.0.100:554/video", 'cam_01', '2층 복도', 'Y', callbackSucces, callbackError);
 
 
 ```
@@ -43,6 +43,6 @@ cordova.plugins.gigaeyesplayer.play("rtsp://10.0.0.100:554/video", 'cam_01', '2�
 * url 
 * camId : 카메라 ID
 * title : 카메라 명
-* recordSattus : 카메라 녹화상태.
+* recordSattus : 카메라 녹화상태. Y/N
 
 
