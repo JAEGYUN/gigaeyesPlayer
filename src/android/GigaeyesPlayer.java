@@ -26,9 +26,9 @@ public class GigaeyesPlayer extends CordovaPlugin {
         String package_name = app.getPackageName();
         Resources res = app.getResources();
 
-        int activity_main = res.getIdentifier("activity_main", "layout", package_name);
+        int activity_main = res.getIdentifier("gigaeyes_activity_main", "layout", package_name);
         Log.d("FLP", "activity_main id: " + activity_main);
-        int over = res.getIdentifier("over", "layout", package_name);
+        int over = res.getIdentifier("play_overlay", "layout", package_name);
         int back = res.getIdentifier("back", "layout", package_name);
         int iot = res.getIdentifier("iot", "layout", package_name);
         int va = res.getIdentifier("layout", "layout", package_name);
