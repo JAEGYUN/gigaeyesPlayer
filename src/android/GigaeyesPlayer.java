@@ -3,11 +3,11 @@ package kr.co.anylogic.myoverlay;
 
 import android.app.Application;
 import android.content.res.Resources;
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import kr.co.anylogic.myoverlay.GigaeyesConstants;
+
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -63,10 +63,10 @@ public class GigaeyesPlayer extends CordovaPlugin {
         int ico_arrow_left = res.getIdentifier("ico_arrow_left", "drawable", package_name);
         int ico_arrow_right = res.getIdentifier("ico_arrow_right", "drawable", package_name);
         int ico_arrow_leftright = res.getIdentifier("ico_arrow_leftright", "drawable", package_name);
-        
+
 
         int camName = res.getIdentifier("camName", "id", package_name);
-     
+
 
         if (action.equals("coolMethod")) {
             this.coolMethod(args.getString(0), callbackContext);
@@ -74,7 +74,7 @@ public class GigaeyesPlayer extends CordovaPlugin {
         } else if (action.equals("play")) {
             GigaeyesPlayer.callbackContext = callbackContext;
             String videoUrl = args.getString(0);
-            GIgaeyesPlayer.camId = args.getString(1);
+            GigaeyesPlayer.camId = args.getString(1);
             String title = args.getString(2);
             String roiInfo = args.getString(3);
             Context context = cordova.getActivity().getApplicationContext();
@@ -139,17 +139,24 @@ public class GigaeyesPlayer extends CordovaPlugin {
     static void setFavorites(Context content, boolean status) {
 //        Toast.makeText(content,"JoystickHandlerActivity move: UP",Toast.LENGTH_SHORT).show();
         if(callbackContext != null){
-            JSONObject obj = new JSONObject();
-            obj.put("type","favorites");
-            obj.put("camId",GigaeyesPlayer.camId);
-            String recStatus = GigaeyesConstants.FAVORITES_ON;
-            if(!status){
-                recStatus = GigaeyesConstants.FAVORITES_OFF;
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("type", "favorites");
+                obj.put("camId", GigaeyesPlayer.camId);
+                String recStatus = GigaeyesConstants.FAVORITES_ON;
+                if (!status) {
+                    recStatus = GigaeyesConstants.FAVORITES_OFF;
+                }
+                obj.put("action", recStatus);
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, obj);
+                pluginResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(pluginResult);
+            }catch (JSONException e) {
+                Log.e("ERR", "execute: Got JSON Exception " + e.getMessage());
+                callbackContext.error(e.getMessage());
             }
-            obj.put("action", recStatus);
-            PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, obj);
-            pluginResult.setKeepCallback(true);
-            callbackContext.sendPluginResult(pluginResult);
+
+
         }
 
     }

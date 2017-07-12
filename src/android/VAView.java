@@ -1,7 +1,7 @@
 package kr.co.anylogic.myoverlay;
 
 import android.app.Activity;
-import android.content.Context;
+import android.os.Bundle;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +11,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.util.AttributeSet;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -153,7 +150,7 @@ public class VAView extends View {
     public VAView(Activity a){
         super(a);
         Resources r = getResources();
-        Bundle extras  = getIntent().getExtras();
+        Bundle extras  = a.getIntent().getExtras();
         int ico_red_in = extras.getInt("ico_red_in");
         int ico_red_out = extras.getInt("ico_red_out");
         int ico_red_inout = extras.getInt("ico_red_inout");

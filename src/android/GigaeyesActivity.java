@@ -2,12 +2,10 @@ package kr.co.anylogic.myoverlay;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -16,13 +14,10 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -30,18 +25,13 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +42,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,7 +58,6 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
     private TextureView tv;
     public static String TAG = "TextureViewActivity";
 
-//    private Renderer mRenderer;
     Window win;
     LayoutInflater inflater;
     RelativeLayout rlTop;
@@ -116,7 +104,6 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
 
     ArrayList<ROI_OBJ> ROI_INFO = new ArrayList<ROI_OBJ>();
     ArrayList<ImageView> imgViews = new ArrayList<ImageView>();
-    // GigaeyesActivity my;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,19 +135,17 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
             va = extras.getInt("va");
             iot =  extras.getInt("iot");
             camName =  extras.getInt("camName");
-            ico_theft =  extras.getInt("ico_theft"); 
-            ico_door =  extras.getInt("ico_door"); 
-            ico_sound =  extras.getInt("ico_sound"); 
-            ico_fire =  extras.getInt("ico_fire"); 
-            ico_temperature =  extras.getInt("ico_temperature"); 
-            ico_humidity =  extras.getInt("ico_humidity"); 
-            ico_star =  extras.getInt("ico_star"); 
-            ico_star_off =  extras.getInt("ico_star_off"); 
-            ico_cameraoff =  extras.getInt("ico_cameraoff"); 
-            ico_cameraon =  extras.getInt("ico_cameraon"); 
-            
-            // image_view = extras.getInt("image_view");
-            // video_view = extras.getInt("video_view");
+            ico_theft =  extras.getInt("ico_theft");
+            ico_door =  extras.getInt("ico_door");
+            ico_sound =  extras.getInt("ico_sound");
+            ico_fire =  extras.getInt("ico_fire");
+            ico_temperature =  extras.getInt("ico_temperature");
+            ico_humidity =  extras.getInt("ico_humidity");
+            ico_star =  extras.getInt("ico_star");
+            ico_star_off =  extras.getInt("ico_star_off");
+            ico_cameraoff =  extras.getInt("ico_cameraoff");
+            ico_cameraon =  extras.getInt("ico_cameraon");
+
         } else {
             finishWithError();
         }
@@ -177,7 +162,6 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
         roiParsing();
 
         tv.setSurfaceTextureListener(this);
-//        tv.setSurfaceTextureListener(mRenderer);
         tv.setOnTouchListener(this);
 
 
@@ -313,7 +297,7 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
             }
         }
 
-        @Override   
+        @Override
         public void onSurfaceTextureAvailable(SurfaceTexture st, int width, int height) {
             Log.d(TAG, "onSurfaceTextureAvailable(" + width + "x" + height + ")");
             mWidth = width;
@@ -324,14 +308,14 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
             }
         }
 
-        @Override  
+        @Override
         public void onSurfaceTextureSizeChanged(SurfaceTexture st, int width, int height) {
             Log.d(TAG, "onSurfaceTextureSizeChanged(" + width + "x" + height + ")");
             mWidth = width;
             mHeight = height;
         }
 
-        @Override  
+        @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture st) {
             Log.d(TAG, "onSurfaceTextureDestroyed");
 
@@ -341,25 +325,22 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
             return true;
         }
 
-        @Override   
+        @Override
         public void onSurfaceTextureUpdated(SurfaceTexture st) {
             //Log.d(TAG, "onSurfaceTextureUpdated");
         }
     }
 
-    
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        View layoutMainView = (View)this.findViewById(R.id.main_container);
 
-    // @Override
-    // public void onWindowFocusChanged(boolean hasFocus) {
-    //     View layoutMainView = (View)this.findViewById(R.id.main_container);
+        Log.w("Layout Width - ", String.valueOf(layoutMainView.getWidth()));
+        Log.w("Layout Height - ", String.valueOf(layoutMainView.getHeight()));
 
-    //     Log.w("Layout Width - ", String.valueOf(layoutMainView.getWidth()));
-    //     Log.w("Layout Height - ", String.valueOf(layoutMainView.getHeight()));
-
-    //     drawVA(layoutMainView.getWidth(), layoutMainView.getHeight());
-    //     drawIoT(layoutMainView.getWidth(), layoutMainView.getHeight());
-    // }
-
+        drawVA(layoutMainView.getWidth(), layoutMainView.getHeight());
+        drawIoT(layoutMainView.getWidth(), layoutMainView.getHeight());
+    }
 
     public void drawVA(int fullWidth, int fullHeight) {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -747,13 +728,13 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
 
     }
     void clickBtn6(){
-       
+
 
         ImageButton btnStar = (ImageButton)findViewById(btn_star);
         if(favFlag) {
             btnStar.setImageResource(ico_star_off);
             Toast.makeText(this, "clickBtn6 Clicked!! 즐겨찾기를 해제합니다.", Toast.LENGTH_LONG).show();
-            GigaeyesPlayer.setFavoritess(getApplicationContext(), false);
+            GigaeyesPlayer.setFavorites(getApplicationContext(), false);
         }else{
             Toast.makeText(this, "clickBtn6 Clicked!! 즐겨찾기를 설정합니다.", Toast.LENGTH_LONG).show();
             btnStar.setImageResource(ico_star);
