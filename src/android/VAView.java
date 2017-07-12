@@ -153,13 +153,20 @@ public class VAView extends View {
     public VAView(Activity a){
         super(a);
         Resources r = getResources();
+        Bundle extras  = getIntent().getExtras();
+        int ico_red_in = extras.getInt("ico_red_in");
+        int ico_red_out = extras.getInt("ico_red_out");
+        int ico_red_inout = extras.getInt("ico_red_inout");
+        int ico_arrow_left = extras.getInt("ico_arrow_left");
+        int ico_arrow_right = extras.getInt("ico_arrow_right");
+        int ico_arrow_leftright = extras.getInt("ico_arrow_leftright");
 
-        lineIn = BitmapFactory.decodeResource(r, R.drawable.ico_red_in);
-        lineOut = BitmapFactory.decodeResource(r, R.drawable.ico_red_out);
-        lineInOut = BitmapFactory.decodeResource(r, R.drawable.ico_red_inout);
-        lineLeft = BitmapFactory.decodeResource(r, R.drawable.ico_arrow_left);
-        lineRight = BitmapFactory.decodeResource(r, R.drawable.ico_arrow_right);
-        lineLeftRight = BitmapFactory.decodeResource(r, R.drawable.ico_arrow_leftright);
+        lineIn = BitmapFactory.decodeResource(r, ico_red_in);
+        lineOut = BitmapFactory.decodeResource(r, ico_red_out);
+        lineInOut = BitmapFactory.decodeResource(r, ico_red_inout);
+        lineLeft = BitmapFactory.decodeResource(r, ico_arrow_left);
+        lineRight = BitmapFactory.decodeResource(r, ico_arrow_right);
+        lineLeftRight = BitmapFactory.decodeResource(r, ico_arrow_leftright);
     }
 
     @Override

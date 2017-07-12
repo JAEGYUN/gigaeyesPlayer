@@ -3,6 +3,8 @@ package kr.co.anylogic.myoverlay;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,8 +21,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -92,8 +94,18 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
     private int btn_va;
     private int btn_capture;
     private int btn_star;
-    private int btn_onoff;
     private int camName;
+    private int over;
+    private int ico_theft;
+    private int ico_door;
+    private int ico_sound;
+    private int ico_fire;
+    private int ico_temperature;
+    private int ico_humidity;
+    private int ico_cameraon;
+    private int ico_cameraoff;
+    private int ico_star;
+    private int ico_star_off;
 
     public String videoSrc ;
     public String cctvName ;
@@ -104,7 +116,7 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
 
     ArrayList<ROI_OBJ> ROI_INFO = new ArrayList<ROI_OBJ>();
     ArrayList<ImageView> imgViews = new ArrayList<ImageView>();
-    MainActivity my;
+    // GigaeyesActivity my;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,8 +148,19 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
             va = extras.getInt("va");
             iot =  extras.getInt("iot");
             camName =  extras.getInt("camName");
-            image_view = extras.getInt("image_view");
-            video_view = extras.getInt("video_view");
+            ico_theft =  extras.getInt("ico_theft"); 
+            ico_door =  extras.getInt("ico_door"); 
+            ico_sound =  extras.getInt("ico_sound"); 
+            ico_fire =  extras.getInt("ico_fire"); 
+            ico_temperature =  extras.getInt("ico_temperature"); 
+            ico_humidity =  extras.getInt("ico_humidity"); 
+            ico_star =  extras.getInt("ico_star"); 
+            ico_star_off =  extras.getInt("ico_star_off"); 
+            ico_cameraoff =  extras.getInt("ico_cameraoff"); 
+            ico_cameraon =  extras.getInt("ico_cameraon"); 
+            
+            // image_view = extras.getInt("image_view");
+            // video_view = extras.getInt("video_view");
         } else {
             finishWithError();
         }
@@ -146,7 +169,7 @@ public class GigaeyesActivity extends Activity implements TextureView.SurfaceTex
         setContentView(activity_main);
         win = getWindow();
         win.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        my = this;
+        // my = this;
 
         tv = (TextureView) findViewById(texture_view);
         tv.requestFocus();

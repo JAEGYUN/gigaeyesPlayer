@@ -1,5 +1,8 @@
 package kr.co.anylogic.myoverlay;
 
+
+import android.app.Application;
+import android.content.res.Resources;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +11,7 @@ import kr.co.anylogic.myoverlay.GigaeyesConstants;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.PluginResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +57,13 @@ public class GigaeyesPlayer extends CordovaPlugin {
         int ico_cameraoff = res.getIdentifier("ico_cameraoff", "drawable", package_name);
         int ico_star = res.getIdentifier("ico_star", "drawable", package_name);
         int ico_star_off = res.getIdentifier("ico_star_off", "drawable", package_name);
+        int ico_red_in = res.getIdentifier("ico_red_in", "drawable", package_name);
+        int ico_red_out = res.getIdentifier("ico_red_out", "drawable", package_name);
+        int ico_red_inout = res.getIdentifier("ico_red_inout", "drawable", package_name);
+        int ico_arrow_left = res.getIdentifier("ico_arrow_left", "drawable", package_name);
+        int ico_arrow_right = res.getIdentifier("ico_arrow_right", "drawable", package_name);
+        int ico_arrow_leftright = res.getIdentifier("ico_arrow_leftright", "drawable", package_name);
+        
 
         int camName = res.getIdentifier("camName", "id", package_name);
      
@@ -61,7 +72,7 @@ public class GigaeyesPlayer extends CordovaPlugin {
             this.coolMethod(args.getString(0), callbackContext);
             return true;
         } else if (action.equals("play")) {
-            GigaeyesJoystick.callbackContext = callbackContext;
+            GigaeyesPlayer.callbackContext = callbackContext;
             String videoUrl = args.getString(0);
             GIgaeyesPlayer.camId = args.getString(1);
             String title = args.getString(2);
@@ -95,6 +106,12 @@ public class GigaeyesPlayer extends CordovaPlugin {
             intent.putExtra("ico_cameraoff", ico_cameraoff);
             intent.putExtra("ico_star", ico_star);
             intent.putExtra("ico_star_off", ico_star_off);
+            intent.putExtra("ico_red_in", ico_red_in);
+            intent.putExtra("ico_red_out", ico_red_out);
+            intent.putExtra("ico_red_inout", ico_red_inout);
+            intent.putExtra("ico_arrow_left", ico_arrow_left);
+            intent.putExtra("ico_arrow_right", ico_arrow_right);
+            intent.putExtra("ico_arrow_leftright", ico_arrow_leftright);
 
             // intent.putExtra("image_view", image_view);
             // intent.putExtra("video_view", video_view);
