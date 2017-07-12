@@ -41,8 +41,20 @@ cordova.plugins.gigaeyesplayer.play("rtsp://10.0.0.100:554/video", 'cam_01', '2�
 
 ## param
 * url 
-* camId : 카메라 ID
-* title : 카메라 명
-* recordSattus : 카메라 녹화상태. Y/N
+* camId : cam ID
+* title : cam Name
+* recordSattus : recording status. Y/N
+
+## return
+```
+ {
+     type : 'favorites',
+     camId : '2층 복도',
+     action : 'Y''
+ }
+```
+
+* type : favorites // 즐겨찾기
+* action : Y (register) , N (release)
 
 
