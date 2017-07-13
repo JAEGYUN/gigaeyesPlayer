@@ -1,13 +1,8 @@
 package kr.co.anylogic.mediaplayer;
 
-
-import android.app.Application;
-import android.content.res.Resources;
-
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import kr.co.anylogic.mediaplayer.GigaeyesConstants;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;

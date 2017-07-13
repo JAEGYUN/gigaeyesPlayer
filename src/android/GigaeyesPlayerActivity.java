@@ -160,7 +160,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
     private MediaPlayer mediaPlayer;
     private TextureView textureView;
 
-    public static String TAG = "TextureViewActivity";
+    public static String TAG = "GifaeyesPlayerActivity";
 
 //    private Renderer mRenderer;
 
@@ -191,7 +191,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
     class ROI_OBJ
     {
         String id;
-        String type;           // 11~16 : LINE, 21~26 : 영역, 31 : text, 32 : image
+        int type;           // 11~16 : LINE, 21~26 : 영역, 31 : text, 32 : image
         String name;        // Text String, image file fullpath
         int order_no;
         ArrayList<Point> coord;
@@ -389,16 +389,12 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
             mediaPlayer.start();
 
         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (SecurityException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -407,14 +403,14 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
     void roiParsing(){
         try {
             // ROI INFO parsing.
-            JSONObject roi_objs = new JSONObject(this.roi_info); 
-            
+            JSONArray roi_objs = new JSONArray(this.roi_info); 
+            Log.d(TAG, "jsonstr(roi)>>>"+this.roi_info);
             for(int j = 0; j < roi_objs.length(); j++){
                 ROI_OBJ curObj = new ROI_OBJ();
                 curObj.coord = new ArrayList<Point>();
                 JSONObject roi_obj = roi_objs.getJSONObject(j);
                 curObj.id = roi_obj.getString("roi_id");
-                curObj.type = roi_obj.getString("roi_type");
+                curObj.type = Integer.parseInt(roi_obj.getString("roi_type"));
                 if(j == 0 ){
                     vaFlag = true;
                 }
@@ -433,14 +429,14 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
             }
 
              // SENSOR INFO parsing.
-            JSONObject sensor_objs = new JSONObject(this.sensor_info); 
+            JSONArray sensor_objs = new JSONArray(this.sensor_info); 
             
             for(int j = 0; j < sensor_objs.length(); j++){
                 ROI_OBJ curObj = new ROI_OBJ();
                 curObj.coord = new ArrayList<Point>();
                 JSONObject roi_obj = sensor_objs.getJSONObject(j);
                 curObj.id = roi_obj.getString("sensor_id");
-                curObj.type = roi_obj.getInt("sensor_type");
+                curObj.type = Integer.parseInt(roi_obj.getString("sensor_type"));
                 if(j == 0 ){
                     iotFlag = true;
                 }
@@ -472,7 +468,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("TestAppActivity", "onStart");
+        Log.d(TAG, "onStart");
     }
 
     @Override
@@ -480,7 +476,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
         super.onPostCreate(savedInstanceState);
 
 
-        Log.d("TestAppActivity", "onPostCreate");
+        Log.d(TAG, "onPostCreate");
     }
 
 
