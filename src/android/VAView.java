@@ -1,7 +1,6 @@
-package kr.co.anylogic.myoverlay;
+package kr.co.anylogic.mediaplayer;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +14,7 @@ import android.graphics.Rect;
 import android.view.View;
 
 import java.util.ArrayList;
+
 
 /**
  * Created by anpro on 2017-07-04.
@@ -69,12 +69,12 @@ public class VAView extends View {
             matrix.postRotate((float)(theta*180/Math.PI + 90));
             Bitmap ro = Bitmap.createBitmap(dimg, 0, 0, dimg.getWidth(), dimg.getHeight(), matrix, true);
 
-            int w1 = ro.getWidth() * 4;
-            int h1 = ro.getHeight() * 4;
-            int x3 = (int)((p1.x + p2.x)/2 - w1/2);
-            int y3 = (int)((p1.y + p2.y)/2 - h1/2);
-            int x4 = (int)((p1.x + p2.x)/2 + w1/2);
-            int y4 = (int)((p1.y + p2.y)/2 + h1/2);
+//            int w1 = ro.getWidth() * 4;
+//            int h1 = ro.getHeight() * 4;
+//            int x3 = (int)((p1.x + p2.x)/2 - w1/2);
+//            int y3 = (int)((p1.y + p2.y)/2 - h1/2);
+//            int x4 = (int)((p1.x + p2.x)/2 + w1/2);
+//            int y4 = (int)((p1.y + p2.y)/2 + h1/2);
             Rect dst1 = new Rect(x1, y1, x2, y2);
 
             cv.drawBitmap(ro, null, dst1, null);
@@ -124,7 +124,7 @@ public class VAView extends View {
             paint1.setStrokeWidth(2);
             paint.setStyle(Paint.Style.STROKE);
 
-            Path path2 = new Path();
+//            Path path2 = new Path();
             int i2 = 0;
             Point spt =  new Point();
             Point ept = new Point();
@@ -143,27 +143,28 @@ public class VAView extends View {
         }
     }
 
-    ArrayList<Line> lines = new ArrayList<Line>();
-    ArrayList<Poly> polies = new ArrayList<Poly>();
+//    ArrayList<Line> lines = new ArrayList<Line>();
+//    ArrayList<Poly> polies = new ArrayList<Poly>();
     ArrayList<Object> objects = new ArrayList<Object>();
 
     public VAView(Activity a){
         super(a);
-        Resources r = getResources();
-        Bundle extras  = a.getIntent().getExtras();
-        int ico_red_in = extras.getInt("ico_red_in");
-        int ico_red_out = extras.getInt("ico_red_out");
-        int ico_red_inout = extras.getInt("ico_red_inout");
-        int ico_arrow_left = extras.getInt("ico_arrow_left");
-        int ico_arrow_right = extras.getInt("ico_arrow_right");
-        int ico_arrow_leftright = extras.getInt("ico_arrow_leftright");
+        Resources res = a.getResources();
+        String packageName = a.getPackageName();
+        int ico_red_in = res.getIdentifier(GigaeyesConstants.image.ICO_RED_IN, GigaeyesConstants.IMAGE, packageName);
+        int ico_red_out = res.getIdentifier(GigaeyesConstants.image.ICO_RED_OUT, GigaeyesConstants.IMAGE, packageName);
+        int ico_red_inout = res.getIdentifier(GigaeyesConstants.image.ICO_RED_IN_OUT, GigaeyesConstants.IMAGE, packageName);
+        int ico_arrow_left = res.getIdentifier(GigaeyesConstants.image.ICO_ARROW_LEFT, GigaeyesConstants.IMAGE, packageName);
+        int ico_arrow_right = res.getIdentifier(GigaeyesConstants.image.ICO_ARROW_RIGHT, GigaeyesConstants.IMAGE, packageName);
+        int ico_arrow_leftright = res.getIdentifier(GigaeyesConstants.image.ICO_ARROW_LEFT_RIGHT, GigaeyesConstants.IMAGE, packageName);
 
-        lineIn = BitmapFactory.decodeResource(r, ico_red_in);
-        lineOut = BitmapFactory.decodeResource(r, ico_red_out);
-        lineInOut = BitmapFactory.decodeResource(r, ico_red_inout);
-        lineLeft = BitmapFactory.decodeResource(r, ico_arrow_left);
-        lineRight = BitmapFactory.decodeResource(r, ico_arrow_right);
-        lineLeftRight = BitmapFactory.decodeResource(r, ico_arrow_leftright);
+
+        lineIn = BitmapFactory.decodeResource(res, ico_red_in);
+        lineOut = BitmapFactory.decodeResource(res, ico_red_out);
+        lineInOut = BitmapFactory.decodeResource(res, ico_red_inout);
+        lineLeft = BitmapFactory.decodeResource(res, ico_arrow_left);
+        lineRight = BitmapFactory.decodeResource(res, ico_arrow_right);
+        lineLeftRight = BitmapFactory.decodeResource(res, ico_arrow_leftright);
     }
 
     @Override

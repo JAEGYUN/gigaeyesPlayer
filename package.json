@@ -1,9 +1,9 @@
 {
-  "name": "kr.co.anylogic.myoverlay",
+  "name": "kr.co.anylogic.mediaplayer",
   "version": "1.0.0",
   "description": "A Codova plugin that simply allows you to immediately play a RTSP  in fullscreen mode.",
   "cordova": {
-    "id": "kr.co.anylogic.myoverlay.GigaeyesPlayer",
+    "id": "kr.co.anylogic.mediaplayer.GigaeyesPlayer",
     "platforms": [
       "android"
     ]
