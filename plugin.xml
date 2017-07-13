@@ -25,6 +25,7 @@
       <source-file src="src/android/res/drawable/btn_back3.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_arrow_left.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_arrow_leftright.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_arrow_right.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_cameraoff.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_cameraon.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_capture.png" target-dir="res/drawable" />
@@ -33,6 +34,7 @@
       <source-file src="src/android/res/drawable/ico_humidity.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_iot.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_red_in.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_red_inout.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_red_out.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_sound.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_star_off.png" target-dir="res/drawable" />
