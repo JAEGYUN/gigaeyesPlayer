@@ -49,9 +49,9 @@
       <source-file src="src/android/res/layout/iot_layer.xml" target-dir="res/layout" />
       <source-file src="src/android/res/layout/play_overlay.xml" target-dir="res/layout" />
       <source-file src="src/android/res/layout/va_layer.xml" target-dir="res/layout" />
-      <source-file src="src/android/VAView.java" target-dir="src/kr/co/anylogic/myoverlay" />
-      <source-file src="src/android/GigaeyesConstants.java" target-dir="src/kr/co/anylogic/myoverlay" />
-      <source-file src="src/android/GigaeyesPlayer.java" target-dir="src/kr/co/anylogic/myoverlay" />
-      <source-file src="src/android/GigaeyesPlayerActivity.java" target-dir="src/kr/co/anylogic/myoverlay" />
+      <source-file src="src/android/VAView.java" target-dir="src/kr/co/anylogic/mediaplayer" />
+      <source-file src="src/android/GigaeyesConstants.java" target-dir="src/kr/co/anylogic/mediaplayer" />
+      <source-file src="src/android/GigaeyesPlayer.java" target-dir="src/kr/co/anylogic/mediaplayer" />
+      <source-file src="src/android/GigaeyesPlayerActivity.java" target-dir="src/kr/co/anylogic/mediaplayer" />
    </platform>
 </plugin>
