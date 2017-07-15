@@ -17,6 +17,7 @@ import org.json.JSONObject;
  */
 public class GigaeyesPlayer extends CordovaPlugin {
 
+    private String TAG = "GigaeysPlayer";
     private static CallbackContext callbackContext;
     private static String camId;
     @Override
@@ -40,7 +41,7 @@ public class GigaeyesPlayer extends CordovaPlugin {
             intent.putExtra(GigaeyesConstants.ROI_INFO, roiInfo);
             intent.putExtra(GigaeyesConstants.SENSOR_INFO, sensorInfo);
             intent.putExtra(GigaeyesConstants.REC_STATUS, record_status);
-            Log.d("FLP", "Adicionaod extra: " + videoUrl);
+            Log.d(TAG, "Adicionaod extra: " + videoUrl);
             cordova.startActivityForResult(this, intent, 0);
             return true;
         }

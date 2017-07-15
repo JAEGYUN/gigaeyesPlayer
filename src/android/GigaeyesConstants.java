@@ -1,9 +1,5 @@
 package kr.co.anylogic.mediaplayer;
 
-/**
- * Created by civan on 2017. 7. 12..
- */
-
 public class GigaeyesConstants {
     public static final String FAVORITES_ON = "Y";
     public static final String FAVORITES_OFF = "N";
@@ -15,7 +11,9 @@ public class GigaeyesConstants {
     public static final String ID = "id";
     public static final String LAYOUT = "layout";
     public static final String IMAGE = "drawable";
-
+    public static int DELAY_TIME = 4000;
+    public static int SENSOR_VIEW_SIZE = 30;
+    public static int SENSOR_REAL_SIZE = 180;
 
     static class image{
         public static final String ICO_ARROW_LEFT = "ico_arrow_left";

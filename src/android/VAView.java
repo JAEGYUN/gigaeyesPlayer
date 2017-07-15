@@ -10,17 +10,14 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.Rect;
+
 import android.view.View;
 
 import java.util.ArrayList;
-
-
-/**
- * Created by anpro on 2017-07-04.
- */
+import android.util.Log;
 
 public class VAView extends View {
+    String TAG = "VAView";
     Canvas ccv;
     Bitmap lineIn;
     Bitmap lineOut;
@@ -28,7 +25,7 @@ public class VAView extends View {
     Bitmap lineLeft;
     Bitmap lineRight;
     Bitmap lineLeftRight;
-    class Line extends Object {
+    private class Line {
         public int type;
         ArrayList<Point> points;
 
@@ -36,59 +33,54 @@ public class VAView extends View {
             type = t;
             points = pts;
         }
-        public void draw(Canvas cv){
+        private void draw(Canvas cv){
             // 라인대신 이미지로 대체
-            Paint paint = new Paint();
-            Bitmap dimg = null;
+            Bitmap dimg;
             if(type == 11 || type == 14){               // In
-                dimg = lineRight;
-            }else if(type == 12 || type == 15){         // Out
                 dimg = lineLeft;
+            }else if(type == 12 || type == 15){         // Out
+                dimg = lineOut;
             }else {
-                dimg = lineLeftRight;
+                dimg = lineInOut;
             }
 
             Point p1 = points.get(0);
             Point p2 = points.get(1);
+//          두점 사이의 기울기 계산
             double theta = Math.atan2((p2.y - p1.y), (p2.x - p1.x));
-
+            double degree = (theta*180)/Math.PI;
+//          두점 사이의 길이 계산 --> 이미지 사이즈 변경기준
+            double distance = Math.sqrt(Math.pow(Math.abs(p2.x-p1.x),2)+Math.pow(Math.abs(p2.y-p1.y),2));
+//            Log.d("두점사이의 거리","p1("+p1.x+","+p1.y+"), p2("+p2.x+","+p2.y+")-->"+distance+", bitmap.width"+dimg.getWidth());
+//            Log.d("두점사이의 기울기","p1("+p1.x+","+p1.y+"), p2("+p2.x+","+p2.y+")-->"+theta+", degree"+degree);
             Paint pa = new Paint();
             pa.setARGB(0xff, 0xf0, 0x46, 0x46);
-            pa.setStrokeWidth(3f);
+            pa.setStrokeWidth(12f);
+//          가운데 점 구하기
+            int x1 = p1.x+(p2.x-p1.x)/2;
+            int y1 = p1.y+(p2.y-p1.y)/2-20;
 
+//            Log.d("두점사이의 가운데 점","p3("+x1+","+y1+")");
             cv.drawLine(p1.x, p1.y, p2.x, p2.y, pa);
-            int w = dimg.getWidth() * 4;
-            int h = dimg.getHeight() * 4;
-            int x1 = (int)((p1.x + p2.x)/2 - w/2);
-            int y1 = (int)((p1.y + p2.y)/2 - h/2);
-            int x2 = (int)((p1.x + p2.x)/2 + w/2);
-            int y2 = (int)((p1.y + p2.y)/2 + h/2);
-            Rect dst = new Rect(x1, y1, x2, y2);
 
+
+            Log.d(TAG, "distance::"+distance+", to Int:"+(int)distance);
             Matrix matrix = new Matrix();
-            matrix.postRotate((float)(theta*180/Math.PI + 90));
-            Bitmap ro = Bitmap.createBitmap(dimg, 0, 0, dimg.getWidth(), dimg.getHeight(), matrix, true);
+            matrix.postRotate((float)degree);
+            matrix.postTranslate(x1, y1);
 
-//            int w1 = ro.getWidth() * 4;
-//            int h1 = ro.getHeight() * 4;
-//            int x3 = (int)((p1.x + p2.x)/2 - w1/2);
-//            int y3 = (int)((p1.y + p2.y)/2 - h1/2);
-//            int x4 = (int)((p1.x + p2.x)/2 + w1/2);
-//            int y4 = (int)((p1.y + p2.y)/2 + h1/2);
-            Rect dst1 = new Rect(x1, y1, x2, y2);
-
-            cv.drawBitmap(ro, null, dst1, null);
+            cv.drawBitmap(dimg,matrix,null);
         }
     }
 
-    class Poly extends Object {
+    private class Poly {
         public int type;
         public ArrayList<Point> points;
         Poly(int t, ArrayList<Point> p){
             type = t;
             points = p;
         }
-        public void draw(Canvas cv){
+        private void draw(Canvas cv){
             Path path = new Path();
             path.setFillType(Path.FillType.EVEN_ODD);
             int i = 0;
@@ -104,30 +96,29 @@ public class VAView extends View {
 
             Paint paint = new Paint();
             if(type == 22){
-                paint.setColor(Color.parseColor("#90ff962e"));
+                paint.setColor(Color.parseColor("#46ff962e"));
             }else if(type == 23){
-                paint.setColor(Color.parseColor("#90a75bcb"));
+                paint.setColor(Color.parseColor("#46a75bcb"));
             }else if(type == 24){
-                paint.setColor(Color.parseColor("#90ff962e"));
+                paint.setColor(Color.parseColor("#46ff962e"));
             }else if(type == 25){
-                paint.setColor(Color.parseColor("#905aaac7"));
+                paint.setColor(Color.parseColor("#465aaac7"));
             }else if(type == 26){
-                paint.setColor(Color.parseColor("#90BAB399"));
+                paint.setColor(Color.parseColor("#46969696"));
             }else {     // 21
-                paint.setColor(Color.parseColor("#90868686"));
+                paint.setColor(Color.parseColor("#4636b255"));
             }
             cv.drawPath(path, paint);
 
 
             Paint paint1 = new Paint();
             paint1.setColor(Color.RED);
-            paint1.setStrokeWidth(2);
+            paint1.setStrokeWidth(5);
             paint.setStyle(Paint.Style.STROKE);
 
-//            Path path2 = new Path();
             int i2 = 0;
             Point spt =  new Point();
-            Point ept = new Point();
+            Point ept ;
             for(Point pt : points) {
                 if(i2 == 0){
                     spt = pt;
@@ -143,20 +134,22 @@ public class VAView extends View {
         }
     }
 
-//    ArrayList<Line> lines = new ArrayList<Line>();
-//    ArrayList<Poly> polies = new ArrayList<Poly>();
     ArrayList<Object> objects = new ArrayList<Object>();
 
     public VAView(Activity a){
         super(a);
-        Resources res = a.getResources();
-        String packageName = a.getPackageName();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
+        Resources res = a.getApplication().getResources();
+        String packageName = a.getApplication().getPackageName();
+
         int ico_red_in = res.getIdentifier(GigaeyesConstants.image.ICO_RED_IN, GigaeyesConstants.IMAGE, packageName);
         int ico_red_out = res.getIdentifier(GigaeyesConstants.image.ICO_RED_OUT, GigaeyesConstants.IMAGE, packageName);
         int ico_red_inout = res.getIdentifier(GigaeyesConstants.image.ICO_RED_IN_OUT, GigaeyesConstants.IMAGE, packageName);
         int ico_arrow_left = res.getIdentifier(GigaeyesConstants.image.ICO_ARROW_LEFT, GigaeyesConstants.IMAGE, packageName);
         int ico_arrow_right = res.getIdentifier(GigaeyesConstants.image.ICO_ARROW_RIGHT, GigaeyesConstants.IMAGE, packageName);
-        int ico_arrow_leftright = res.getIdentifier(GigaeyesConstants.image.ICO_ARROW_LEFT_RIGHT, GigaeyesConstants.IMAGE, packageName);
+        int ico_arrow_left_right = res.getIdentifier(GigaeyesConstants.image.ICO_ARROW_LEFT_RIGHT, GigaeyesConstants.IMAGE, packageName);
 
 
         lineIn = BitmapFactory.decodeResource(res, ico_red_in);
@@ -164,7 +157,9 @@ public class VAView extends View {
         lineInOut = BitmapFactory.decodeResource(res, ico_red_inout);
         lineLeft = BitmapFactory.decodeResource(res, ico_arrow_left);
         lineRight = BitmapFactory.decodeResource(res, ico_arrow_right);
-        lineLeftRight = BitmapFactory.decodeResource(res, ico_arrow_leftright);
+        lineLeftRight = BitmapFactory.decodeResource(res, ico_arrow_left_right);
+
+
     }
 
     @Override

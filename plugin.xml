@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="kr.co.anylogic.mediaplayer" version="1.0.0">
    <name>GigaeyesPlayer</name>
-   <js-module name="GigaeyesPlayer" src="www/gigaeyesplayer.js">
+   <js-module name="GigaeyesPlayer" src="www/gigaeyesPlayer.js">
       <clobbers target="cordova.plugins.gigaeyesplayer" />
    </js-module>
    <platform name="android">

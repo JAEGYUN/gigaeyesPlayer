@@ -43,113 +43,9 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class GigaeyesPlayerActivity extends Activity implements TextureView.SurfaceTextureListener, View.OnTouchListener {
-
-    public static String strjson = "{\n" +
-            "\t'roi_info': {\n" +
-            "\t\t'roi_objs': [{\n" +
-            "\t\t\t'roi_id': 'ROI-LineCount-INOUT-00001',\n" +
-            "\t\t\t'roi_type' : '13',\n" +
-            "\t\t\t'order_no' : 1,\n" +
-            "\t\t\t'roi_coord' : [{\n" +
-            "\t\t\t\t'x': '47.344',\n" +
-            "\t\t\t\t'y' : '41.481'\n" +
-            "\t\t\t}, { 'x': '61.458',\n" +
-            "\t\t\t\t'y' : '51.481'\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t'roi_color' : {\n" +
-            "\t\t\t\t'r' : '255',\n" +
-            "\t\t\t\t'g' : '255',\n" +
-            "\t\t\t\t'b' : '255'\n" +
-            "\t\t\t}\n" +
-            "\t\t}, { 'roi_id': 'ROI-LineCrossing-IN-00002',\n" +
-            "\t\t\t'roi_type' : '14',\n" +
-            "\t\t\t'order_no' : 2,\n" +
-            "\t\t\t'roi_coord' : [{\n" +
-            "\t\t\t\t'x': '29.583',\n" +
-            "\t\t\t\t'y' : '43.796'\n" +
-            "\t\t\t},{ 'x': '25.938',\n" +
-            "\t\t\t\t'y' : '50.463'\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t'roi_color' : {\n" +
-            "\t\t\t\t'r' : '255',\n" +
-            "\t\t\t\t'g' : '0',\n" +
-            "\t\t\t\t'b' : '0'\n" +
-            "\t\t\t}\n" +
-            "\t\t}, { 'roi_id': 'ROI-AreaCount-00003',\n" +
-            "\t\t\t'roi_type' : '21',\n" +
-            "\t\t\t'order_no' : 3,\n" +
-            "\t\t\t'roi_coord' : [{\n" +
-            "\t\t\t\t'x': '61.823',\n" +
-            "\t\t\t\t'y' : '29.537'\n" +
-            "\t\t\t},{ 'x': '69.740',\n" +
-            "\t\t\t\t'y' : '29.537'\n" +
-     //       "\t\t\t},{ 'x': '69.740',\n" +
-     //       "\t\t\t\t'y' : '54.815'\n" +
-            "\t\t\t},{ 'x': '61.823',\n" +
-            "\t\t\t\t'y' : '54.815'\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t'roi_color' : {\n" +
-            "\t\t\t\t'r' : '0',\n" +
-            "\t\t\t\t'g' : '0',\n" +
-            "\t\t\t\t'b' : '255'\n" +
-            "\t\t\t}\n" +
-            "\t\t}, { 'roi_id': 'ROI-AreaAtack-IN-00004',\n" +
-            "\t\t\t'roi_type' : '22',\n" +
-            "\t\t\t'order_no' : 4,\n" +
-            "\t\t\t'roi_coord' : [{\n" +
-            "\t\t\t\t'x': '1.927',\n" +
-            "\t\t\t\t'y' : '31.389'\n" +
-            "\t\t\t},{ 'x': '17.188',\n" +
-            "\t\t\t\t'y' : '31.389'\n" +
-            "\t\t\t},{ 'x': '17.188',\n" +
-            "\t\t\t\t'y' : '47.037'\n" +
-            "\t\t\t},{ 'x': '1.927',\n" +
-            "\t\t\t\t'y' : '47.037'\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t'roi_color' : {\n" +
-            "\t\t\t\t'r' : '255',\n" +
-            "\t\t\t\t'g' : '0',\n" +
-            "\t\t\t\t'b' : '0'\n" +
-            "\t\t\t}\n" +
-            "\t\t}, {'roi_id': 'ROI-TEXT-00007',\n" +
-            "\t\t\t'roi_type' : '10002',\n" +
-            "\t\t\t'roi_name' : 'Test String : TEST',\n" +
-            "\t\t\t'order_no' : 5,\n" +
-            "\t\t\t'roi_coord' : [{\n" +
-            "\t\t\t\t'x': '71.927',\n" +
-            "\t\t\t\t'y' : '33.389'\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t'roi_color' : {\n" +
-            "\t\t\t\t'r' : '255',\n" +
-            "\t\t\t\t'g' : '255',\n" +
-            "\t\t\t\t'b' : '255'\n" +
-            "\t\t\t}\n" +            "\t\t}, {'roi_id': 'ROI-TEXT-00005',\n" +
-            "\t\t\t'roi_type' : '10003',\n" +
-            "\t\t\t'roi_name' : 'Test String : TEST',\n" +
-            "\t\t\t'order_no' : 5,\n" +
-            "\t\t\t'roi_coord' : [{\n" +
-            "\t\t\t\t'x': '31.927',\n" +
-            "\t\t\t\t'y' : '43.389'\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t'roi_color' : {\n" +
-            "\t\t\t\t'r' : '255',\n" +
-            "\t\t\t\t'g' : '255',\n" +
-            "\t\t\t\t'b' : '255'\n" +
-            "\t\t\t}\n" +
-            "\t\t}, {'roi_id': 'ROI-IMAGE-00006',\n" +
-            "\t\t\t'roi_type' : '10002',\n" +
-            "\t\t\t'roi_name' : '사람아이콘2.png',\n" +
-            "\t\t\t'order_no' : 6,\n" +
-            "\t\t\t'roi_coord' : [{\n" +
-            "\t\t\t\t'x' : '50.000',\n" +
-            "\t\t\t\t'y' : '50.000'\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t'ratio' : 50.000\n" +
-            "\t\t}]\n" +
-            "\t}\n" +
-            "}\n";
 
     private String roi_info ="[]";
     private String sensor_info = "[]";
@@ -160,9 +56,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
     private MediaPlayer mediaPlayer;
     private TextureView textureView;
 
-    public static String TAG = "GifaeyesPlayerActivity";
-
-//    private Renderer mRenderer;
+    public static String TAG = "GigaeyesPlayerActivity";
 
     LayoutInflater inflater;
     RelativeLayout rlTop;
@@ -176,8 +70,8 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
 //  ROI 등록유무
     boolean vaFlag = false;
 
-    private String videoSrc = "rtsp://211.54.3.139:1935/gigaeyesmonitor/test-1004.stream";
-    public static String cctvName = "CCTV-정문";
+    private String videoSrc = "";
+    private String cctvName = "";
     public static boolean iotViewFlag = false;
     public static boolean vaViewFlag = false;
     public static boolean favFlag = false;
@@ -185,7 +79,6 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
 
     ArrayList<ROI_OBJ> ROI_INFO = new ArrayList<ROI_OBJ>();
     ArrayList<ImageView> imgViews = new ArrayList<ImageView>();
-//    GigaeyesPlayerActivity my;
 
 
     class ROI_OBJ
@@ -195,9 +88,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
         String name;        // Text String, image file fullpath
         int order_no;
         ArrayList<Point> coord;
-        // int colorR;
-        // int colorG;
-        // int colorB;
+
     }
 
 
@@ -218,16 +109,11 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
         Bundle extras  = getIntent().getExtras();
         if (extras != null) {
             this.videoSrc = extras.getString(GigaeyesConstants.VIDEO_URL);
-            // this.strjson = extras.getString("ROI_INFO");
             this.cctvName = extras.getString(GigaeyesConstants.VIDEO_TITLE);
             this.roi_info = extras.getString(GigaeyesConstants.ROI_INFO);
             this.sensor_info = extras.getString(GigaeyesConstants.SENSOR_INFO);
-            if(extras.getString(GigaeyesConstants.REC_STATUS) != null 
-                && GigaeyesConstants.STREAM_VALID_STATUS.equals(extras.getString(GigaeyesConstants.REC_STATUS))){
-               this.onoffFlag = true;
-            }else{
-               this.onoffFlag = false;
-            }
+            this.onoffFlag = extras.getString(GigaeyesConstants.REC_STATUS) != null
+                    && GigaeyesConstants.STREAM_VALID_STATUS.equals(extras.getString(GigaeyesConstants.REC_STATUS));
         } else {
            finishWithError();
         }
@@ -244,11 +130,81 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
 
         roiParsing();
 
+        /*
+         * MediaPlayer의 메소드 호출 순서 및 방법
+         * 1. setDataSource -> initilalize
+         * 2. prepare()/prepareAsync() 호출 --> prepared (스트림을 재생할 수 있는 상태)
+         * 3. started. stoped, paused 에서 prepare()/prepareAsync() 호출  --> stop() --> prepared (position 0 : 다시 스트림을 재생할 수 있는 상태
+         * 4. prepared, started, paused, playbackCompleted --> seekTo()
+         * 5. datasource를 재정의하고자 하는 경우 reset 호출후 재정의해야 함
+         * 6. relase() - End . Idle 상태로 다시 갈 수 없으며 객체를 생성하지 않는 한 MediaPlayer는 어떤 파일이나 스트림도 재생할 수 없음
+         *
+         * TextureView를 통한 MediaPlayer 재생 처리
+         * 1. MediaPlayer의 setSurface 활용 : 비디오인 경우 사용할 수 있으며 Surface객체를 받아 MediaPlayer의 스트림을 해당 Surface에 그리며
+         *    Surface는 SurfaceTexture를 사용하여 생성
+         * 2. TextureView에서 setSurfaceTextureListener를 해주어 SurfaceTexture cycle과 MediaPlayer가 밀접하게 동작할 수 있도록 설정 필요
+         */
         textureView.setSurfaceTextureListener(this);
         textureView.setOnTouchListener(this);
 
 
     }
+
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+//      TextureView에서 SurfaceTexture를 사용할 준비가 되어있음을 의미
+//      SurfaceTexture는 HardwareLayer를 가져오는 메소드 내부에서 생성되며 ,
+//      onSurfaceTextureAvailableonSurfaceTextureAvailable는 생성 후 호출된다
+        Log.v(TAG, "Surface is start");
+
+        Surface s = new Surface(surface);
+
+        try {
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(videoSrc);
+            mediaPlayer.setSurface(s);
+            mediaPlayer.prepare();
+
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.start();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
+//        TextureView의 width, height 변경시 호출되며 SurfaceTexture의 Buffer Size가 바뀌었음을 의미한다
+        Log.v(TAG, "Surface is changed");
+    }
+
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+//      SurfaceTextView가 종료될 때 플레이어를 release 한다
+        Log.v(TAG, "Surface is destroyed");
+
+
+        if(mediaPlayer == null){
+            return true;
+
+        }
+
+        Log.d(TAG,"Player is released!!!");
+        mediaPlayer.release();
+        mediaPlayer = null;
+
+        return true;
+
+    }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -336,10 +292,10 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
                         ImageView ivg = new ImageView(this);
                         ActionBar.LayoutParams params = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         for (Point pt : roiValue.coord) {
-                            int x = fullWidth * pt.x / 100000;
+                            int x = fullWidth * pt.x  /100000;
                             int y = fullHeight * pt.y / 100000;
 
-                            params.setMargins(x, y, 0, 0);
+                            params.setMargins(x-GigaeyesConstants.SENSOR_REAL_SIZE, y-GigaeyesConstants.SENSOR_REAL_SIZE, 0, 0);
                             ivg.setLayoutParams(params);
                             if (roiValue.type == 10001) {         // 움직임
                                 ivg.setBackgroundResource(ico_theft);
@@ -354,6 +310,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
                             } else if (roiValue.type == 10006) {  // 습도
                                 ivg.setBackgroundResource(ico_humidity);
                             } else {
+                                Log.d(TAG,"요청유형의 센서는 지원되지 않습니다. ["+roiValue.type+"]");
                             }
                             iotLayer.addView(ivg);
                         }
@@ -365,40 +322,10 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
         }
     }
 
-    @Override
-    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
-    }
-    @Override
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-        return true;
-    }
+
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
     }
-    @Override
-    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        Surface s = new Surface(surface);
-
-        try {
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(videoSrc);
-            mediaPlayer.setSurface(s);
-            mediaPlayer.prepare();
-
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.start();
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     void roiParsing(){
         try {
@@ -440,14 +367,6 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
                 if(j == 0 ){
                     iotFlag = true;
                 }
-                // if(curObj.type == 10001 || curObj.type == 10002 || curObj.type == 10003 ||
-                //     curObj.type == 10004 || curObj.type == 10005 || curObj.type == 10006  ){
-                //     iotFlag = true;
-                // }
-                // if(curObj.type == 11 || curObj.type == 12 || curObj.type == 13 || curObj.type == 14 || curObj.type == 15 || curObj.type == 16 ||
-                //     curObj.type == 21 || curObj.type == 22 || curObj.type == 23 || curObj.type == 24 || curObj.type == 25 || curObj.type == 26 ){
-                //     vaFlag = true;
-                // }
 
                 curObj.order_no = roi_obj.getInt("order_no");
 
@@ -465,25 +384,10 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
     }
 
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart");
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-
-        Log.d(TAG, "onPostCreate");
-    }
-
-
     void enrollButton(){
 //        버튼
         int btn_back = res.getIdentifier(GigaeyesConstants.button.BACK, GigaeyesConstants.ID, this.packageName);
-        int btn_onoff = res.getIdentifier(GigaeyesConstants.button.ONOFF, GigaeyesConstants.ID, this.packageName);
+        int btn_on_off = res.getIdentifier(GigaeyesConstants.button.ONOFF, GigaeyesConstants.ID, this.packageName);
         int btn_iot = res.getIdentifier(GigaeyesConstants.button.IOT, GigaeyesConstants.ID, this.packageName);
         int btn_va = res.getIdentifier(GigaeyesConstants.button.VA, GigaeyesConstants.ID, this.packageName);
         int btn_capture = res.getIdentifier(GigaeyesConstants.button.CAPTURE, GigaeyesConstants.ID, this.packageName);
@@ -496,7 +400,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
             }
         }));
 
-        ImageButton btn2 = (ImageButton)findViewById(btn_onoff);
+        ImageButton btn2 = (ImageButton)findViewById(btn_on_off);
         btn2.setOnClickListener((new ImageButton.OnClickListener(){
             public void onClick(View v){
                 clickBtn2();
@@ -539,24 +443,22 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
     public boolean onTouch(View v, MotionEvent event) {
 
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-//            Toast.makeText(this, "Touch Event Received", Toast.LENGTH_LONG).show();
             setOverlay(true);
             return true;
         }
         return false;
     }
 
-    private int DELAY_TIME = 4000;
-
     Runnable mNavHider = new Runnable() {
         @Override
         public void run() {
-//            Toast.makeText(GigaeyesPlayerActivity.this, "mNavHide function called", Toast.LENGTH_LONG).show();
             setOverlay(false);
         }
     };
 
     void setOverlay(boolean visible) {
+
+//   버튼 타이틀 바 overlay 설정.
         if (!visible) {
             ((ViewGroup) rlTop.getParent()).removeView(rlTop);
             ((ViewGroup) backLayout.getParent()).removeView(backLayout);
@@ -580,8 +482,10 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
             int ico_camera_off = res.getIdentifier(GigaeyesConstants.image.ICO_CAMERA_OFF, GigaeyesConstants.IMAGE, this.packageName);
             int ico_star_on = res.getIdentifier(GigaeyesConstants.image.ICO_STAR_ON, GigaeyesConstants.IMAGE, this.packageName);
             int ico_star_off = res.getIdentifier(GigaeyesConstants.image.ICO_STAR_OFF, GigaeyesConstants.IMAGE, this.packageName);
-
-
+            int ico_iot_on = res.getIdentifier(GigaeyesConstants.image.ICO_IOT, GigaeyesConstants.IMAGE, this.packageName);
+            int ico_iot_off = res.getIdentifier(GigaeyesConstants.image.ICO_IOT_OFF, GigaeyesConstants.IMAGE, this.packageName);
+            int ico_va_on = res.getIdentifier(GigaeyesConstants.image.ICO_VA, GigaeyesConstants.IMAGE, this.packageName);
+            int ico_va_off = res.getIdentifier(GigaeyesConstants.image.ICO_VA_OFF, GigaeyesConstants.IMAGE, this.packageName);
 
             backLayout = (RelativeLayout)inflater.inflate(back_layout, null);
             getWindow().addContentView(backLayout, new RelativeLayout.LayoutParams(
@@ -595,7 +499,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
 
 
             TextView tv = (TextView)findViewById(title);
-            tv.setText(cctvName);
+            tv.setText(this.cctvName);
 
             ImageButton btnOnoff = (ImageButton)findViewById(btn_on_off);
             if(onoffFlag) {
@@ -610,11 +514,14 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
                 btnStar.setImageResource(ico_star_off);
             }
 
-//            vaFlag = false;
-//            iotFlag = true;
             // iot_layer, va_layer view를 생성한다.
             if (vaFlag) {
                 ImageButton btnva = (ImageButton)findViewById(btn_va);
+                if(vaViewFlag){
+                    btnva.setImageResource(ico_va_on);
+                }else{
+                    btnva.setImageResource(ico_va_off);
+                }
                 btnva.setVisibility(View.VISIBLE);
             }else{
                 ImageButton btnva = (ImageButton)findViewById(btn_va);
@@ -626,6 +533,11 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
                 if(!vaFlag){
                     ImageButton btnva = (ImageButton)findViewById(btn_va);
                     btniot.setLayoutParams(btnva.getLayoutParams());
+                }
+                if(iotViewFlag){
+                    btniot.setImageResource(ico_iot_on);
+                }else{
+                    btniot.setImageResource(ico_iot_off);
                 }
                 btniot.setVisibility(View.VISIBLE);
             }else{
@@ -639,7 +551,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
             Handler h = tv.getHandler();
             if (h != null) {
                 h.removeCallbacks(mNavHider);
-                h.postDelayed(mNavHider, DELAY_TIME);
+                h.postDelayed(mNavHider, GigaeyesConstants.DELAY_TIME);
             }
             clickedFlag = true;
         }
@@ -647,14 +559,12 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
 
 
     void clickBtn1(){
-//        Toast.makeText(this, "clickBtn1 Clicked!! 종료합니다.", Toast.LENGTH_LONG).show();
-        moveTaskToBack(true);
+//      뒤로가기
         finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     void clickBtn2(){
-        Toast.makeText(this, "clickBtn2 Clicked!! 녹화중임을 표시합니다.", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "clickBtn2 Clicked!! 녹화중임을 표시합니다.", Toast.LENGTH_LONG).show();
     }
 
     void clickBtn3(){
@@ -699,6 +609,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
             }
         }
     }
+
     void clickBtn5(){
         Log.d(TAG, "스크린샷을 저장합니다" );
         getBitmap(textureView);
@@ -725,14 +636,6 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
         favFlag = !favFlag;
     }
 
-//    private void setViewInvalidate(View... views){
-//        for(View v : views){
-//            v.invalidate();
-//        }
-//    }
-
-
-
     public void getBitmap(TextureView vv) {
         Bitmap bm = vv.getBitmap();
 
@@ -753,13 +656,13 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
-        SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+        SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.KOREA);
         String strNow = sdfNow.format(date);
 
         String mPath = Environment.getExternalStorageDirectory().toString()
                 + "/Pictures/" + strNow + ".png";
 
-        OutputStream fout = null;
+        OutputStream fout ;
         File imageFile = new File(mPath);
 
         try {
@@ -785,19 +688,18 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
 
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
-        Bitmap bm = view.getDrawingCache();
+        return view.getDrawingCache();
 
-        return bm;
     }
+
     public Bitmap getIoTOverlayBitmap() {
         int iot_layer = res.getIdentifier(GigaeyesConstants.IOT_LAYER_ID, GigaeyesConstants.ID, this.packageName);
         RelativeLayout view = (RelativeLayout)findViewById(iot_layer);
 
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
-        Bitmap bm = view.getDrawingCache();
+        return view.getDrawingCache();
 
-        return bm;
     }
 
     private void finishWithError() {
