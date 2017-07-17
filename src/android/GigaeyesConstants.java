@@ -54,6 +54,7 @@ public class GigaeyesConstants {
     public static final String ROI_INFO = "ROI_INFO";
     public static final String SENSOR_INFO = "SENSOR_INFO";
     public static final String REC_STATUS = "REC_STATUS";
+    public static final String FAVORITES = "IS_FAVORITES";
     public static final String MAIN_CONTAINER = "main_container";
     public static final String MAIN_LAYOUT = "gigaeyes_activity_main";
     public static final String CONTROL_LAYOUT = "play_overlay";

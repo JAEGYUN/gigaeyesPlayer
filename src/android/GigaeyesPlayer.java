@@ -3,6 +3,7 @@ package kr.co.anylogic.mediaplayer;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import kr.co.anylogic.mediaplayer.GigaeyesConstants;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -34,6 +35,7 @@ public class GigaeyesPlayer extends CordovaPlugin {
             String roiInfo = args.getString(3);
             String sensorInfo = args.getString(4);
             String record_status = args.getString(5);
+            String bookmark = args.getString(6);
             Context context = cordova.getActivity().getApplicationContext();
             Intent intent = new Intent(context, GigaeyesPlayerActivity.class);
             intent.putExtra(GigaeyesConstants.VIDEO_URL, videoUrl);
@@ -41,6 +43,7 @@ public class GigaeyesPlayer extends CordovaPlugin {
             intent.putExtra(GigaeyesConstants.ROI_INFO, roiInfo);
             intent.putExtra(GigaeyesConstants.SENSOR_INFO, sensorInfo);
             intent.putExtra(GigaeyesConstants.REC_STATUS, record_status);
+            intent.putExtra(GigaeyesConstants.BOOKMARK, bookmark);
             Log.d(TAG, "Adicionaod extra: " + videoUrl);
             cordova.startActivityForResult(this, intent, 0);
             return true;

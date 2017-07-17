@@ -97,7 +97,7 @@ var roi_info = [{
             }
           ];
 
-cordova.plugins.gigaeyesplayer.play("rtsp://10.0.0.100:554/video", 'cam_01', '2층 복도', roi_info , sensor_info ,'Y', callbackSucces, callbackError);
+cordova.plugins.gigaeyesplayer.play("rtsp://10.0.0.100:554/video", 'cam_01', '2층 복도', roi_info , sensor_info ,'Y', 'Y' callbackSucces, callbackError);
 
 
 ```
@@ -109,6 +109,7 @@ cordova.plugins.gigaeyesplayer.play("rtsp://10.0.0.100:554/video", 'cam_01', '2�
 * roiInfo : ROI Objects
 * sensorInfo : Sensor Objects
 * recordSattus : recording status. Y/N
+* is_favorites : favorites Y/N
 
 ## return
 ```

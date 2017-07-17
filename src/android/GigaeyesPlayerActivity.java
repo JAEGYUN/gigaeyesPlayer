@@ -114,6 +114,8 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
             this.sensor_info = extras.getString(GigaeyesConstants.SENSOR_INFO);
             this.onoffFlag = extras.getString(GigaeyesConstants.REC_STATUS) != null
                     && GigaeyesConstants.STREAM_VALID_STATUS.equals(extras.getString(GigaeyesConstants.REC_STATUS));
+            this.favFlag = extras.getString(GigaeyesConstants.FAVORITES) != null
+                    && GigaeyesConstants.FAVORITES_ON.equals(extras.getString(GigaeyesConstants.FAVORITES));
         } else {
            finishWithError();
         }
