@@ -44,7 +44,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-
+import android.net.Uri;
+import java.util.Map;
+import java.util.HashMap;
 public class GigaeyesPlayerActivity extends Activity implements TextureView.SurfaceTextureListener, View.OnTouchListener {
 
     private String roi_info ="[]";
@@ -162,13 +164,21 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
         Surface s = new Surface(surface);
 
         try {
+            // 추후 인증을 위한 header 처리를 위해 추가...
+            Map<String,String> headers = new HashMap<String, String>();
+            headers.put("Transport","RTP/AVP/TCP");
+
             mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(videoSrc);
+            Uri url = Uri.parse(this.videoSrc);
+            Log.d(TAG, "SCHEMA:::"+url.getScheme());
+
+            mediaPlayer.setDataSource(getApplicationContext(), url, headers);
             mediaPlayer.setSurface(s);
             mediaPlayer.prepare();
 
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.start();
+
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
