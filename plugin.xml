@@ -4,6 +4,27 @@
    <js-module name="GigaeyesPlayer" src="www/gigaeyesPlayer.js">
       <clobbers target="cordova.plugins.gigaeyesplayer" />
    </js-module>
+   <platform name="ios">
+      <config-file parent="/*" target="config.xml">
+         <feature name="GigaeyesPlayer">
+            <param name="ios-package" value="GigaeyesPlayer" />
+         </feature>
+      </config-file>
+      <header-file src="src/ios/GigaeyesPlayer.h" />
+      <source-file src="src/ios/GigaeyesPlayer.m" />
+      <header-file src="src/ios/PlayerViewController.h" />
+      <source-file src="src/ios/PlayerViewController.m" />
+      <resource-file src="src/ios/PlayerViewController.xib" />
+      <resource-file src="src/ios/res/btn_back3.png" />
+      <framework src="libiconv.tbd" />
+      <framework src="libz.tbd" />
+      <framework src="libbz2.tbd" />
+      <framework src="CoreMedia.framework" />
+      <framework src="AudioToolBox.framework" />
+      <framework src="VideoToolBox.framework" />
+      <framework src="src/ios/include/SGPlatform.framework" custom="true" />
+      <framework src="src/ios/include/SGPlayer.framework" custom="true" />
+   </platform>
    <platform name="android">
       <framework src="com.android.support.constraint:constraint-layout:1.0.2" />
       <config-file parent="/*" target="res/xml/config.xml">
