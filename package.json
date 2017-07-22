@@ -5,7 +5,8 @@
   "cordova": {
     "id": "kr.co.anylogic.mediaplayer.GigaeyesPlayer",
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   },
   "engines": {

@@ -57,6 +57,6 @@
         </barButtonItem>
     </objects>
     <resources>
-        <image name="btn_back3.png" width="23" height="36"/>
+        <image name="btn_back1.png" width="23" height="36"/>
     </resources>
 </document>
