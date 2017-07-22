@@ -15,7 +15,7 @@
       <header-file src="src/ios/PlayerViewController.h" />
       <source-file src="src/ios/PlayerViewController.m" />
       <resource-file src="src/ios/PlayerViewController.xib" />
-      <resource-file src="src/ios/res/btn_back3.png" />
+      <resource-file src="src/ios/res/btn_back1.png" />
       <framework src="libiconv.tbd" />
       <framework src="libz.tbd" />
       <framework src="libbz2.tbd" />
@@ -43,7 +43,7 @@
        <config-file target="AndroidManifest.xml" parent="/manifest/application">
         <activity android:name="kr.co.anylogic.mediaplayer.GigaeyesPlayerActivity"></activity>
       </config-file>
-      <source-file src="src/android/res/drawable/btn_back1.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/btn_back3.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_arrow_left.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_arrow_leftright.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_arrow_right.png" target-dir="res/drawable" />
