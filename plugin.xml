@@ -16,6 +16,29 @@
       <source-file src="src/ios/PlayerViewController.m" />
       <resource-file src="src/ios/PlayerViewController.xib" />
       <resource-file src="src/ios/res/btn_back1.png" />
+      <source-file src="src/ios/res/btn_back3.png" />
+      <source-file src="src/ios/res/ico_arrow_left.png"  />
+      <source-file src="ssrc/ios/res/ico_arrow_leftright.png"  />
+      <source-file src="src/ios/res/ico_arrow_right.png"  />
+      <source-file src="src/ios/res/ico_cameraoff.png" />
+      <source-file src="src/ios/res/ico_cameraon.png"  />
+      <source-file src="src/ios/res/ico_capture.png" />
+      <source-file src="src/ios/res/ico_door.png"  />
+      <source-file src="src/ios/res/ico_fire.png" />
+      <source-file src="src/ios/res/ico_humidity.png" />
+      <source-file src="src/ios/res/ico_iot.png" />
+      <source-file src="src/ios/res/ico_red_in.png" />
+      <source-file src="src/ios/res/ico_red_inout.png" />
+      <source-file src="src/ios/res/ico_red_out.png" />
+      <source-file src="src/ios/res/ico_sound.png" />
+      <source-file src="src/ios/res/ico_star_off.png" />
+      <source-file src="src/ios/res/ico_star.png" />
+      <source-file src="src/ios/res/ico_temperature.png" />
+      <source-file src="src/ios/res/ico_theft.png" />
+      <source-file src="src/ios/res/ico_va.png" />
+      <source-file src="src/ios/res/ico_va_off.png" />
+      <source-file src="src/ios/res/ico_iot_off.png" />
+      <source-file src="src/ios/res/images.png" />
       <framework src="libiconv.tbd" />
       <framework src="libz.tbd" />
       <framework src="libbz2.tbd" />
@@ -27,6 +50,7 @@
    </platform>
    <platform name="android">
       <framework src="com.android.support.constraint:constraint-layout:1.0.2" />
+      <framework src="de.mrmaffen:vlc-android-sdk:1.9.8" />
       <config-file parent="/*" target="res/xml/config.xml">
          <feature name="GigaeyesPlayer">
             <param name="android-package" value="kr.co.anylogic.mediaplayer.GigaeyesPlayer" />

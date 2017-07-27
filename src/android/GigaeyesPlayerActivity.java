@@ -11,15 +11,13 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.SurfaceTexture;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +26,18 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+//import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import org.videolan.libvlc.Media;
+import org.videolan.libvlc.MediaPlayer;
+import org.videolan.libvlc.IVLCVout;
+import org.videolan.libvlc.LibVLC;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,9 +49,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import android.net.Uri;
-import java.util.Map;
-import java.util.HashMap;
-public class GigaeyesPlayerActivity extends Activity implements TextureView.SurfaceTextureListener, View.OnTouchListener {
+public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callback, TextureView.SurfaceTextureListener, View.OnTouchListener {
+
+    //기본 위젯 설정및 변수 설정
+    private LibVLC libvlc;
+//    private SeekBar mSeekBar;
 
     private String roi_info ="[]";
     private String sensor_info = "[]";
@@ -55,6 +61,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
     private String packageName;
     private Resources res;
 
+//  안드로이드 MediaPlayer에서 VLC Player로 변경
     private MediaPlayer mediaPlayer;
     private TextureView textureView;
 
@@ -126,6 +133,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
         setContentView(main_layout);
 
@@ -151,44 +159,17 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
         textureView.setSurfaceTextureListener(this);
         textureView.setOnTouchListener(this);
 
-
     }
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+
 //      TextureView에서 SurfaceTexture를 사용할 준비가 되어있음을 의미
 //      SurfaceTexture는 HardwareLayer를 가져오는 메소드 내부에서 생성되며 ,
 //      onSurfaceTextureAvailableonSurfaceTextureAvailable는 생성 후 호출된다
         Log.v(TAG, "Surface is start");
+        createPlayer();
 
-        Surface s = new Surface(surface);
-
-        try {
-            // 추후 인증을 위한 header 처리를 위해 추가...
-            Map<String,String> headers = new HashMap<String, String>();
-            headers.put("Transport","RTP/AVP/TCP");
-
-            mediaPlayer = new MediaPlayer();
-            Uri url = Uri.parse(this.videoSrc);
-            Log.d(TAG, "SCHEMA:::"+url.getScheme());
-
-            mediaPlayer.setDataSource(getApplicationContext(), url, headers);
-            mediaPlayer.setSurface(s);
-            mediaPlayer.prepare();
-
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.start();
-
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -572,7 +553,7 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
 
     void clickBtn1(){
 //      뒤로가기
-        finish();
+        releasePlayer();
     }
 
     void clickBtn2(){
@@ -718,4 +699,79 @@ public class GigaeyesPlayerActivity extends Activity implements TextureView.Surf
         setResult(100);
         finish();
     }
+
+    @Override
+    public void onSurfacesCreated(IVLCVout ivlcVout) {
+
+    }
+
+    @Override
+    public void onSurfacesDestroyed(IVLCVout ivlcVout) {
+
+    }
+
+    @Override //VLC 레이아웃 설정
+    public void onNewLayout(IVLCVout vout, int width, int height, int visibleWidth, int visibleHeight, int sarNum, int sarDen) {
+
+    }
+
+    @Override  //하드웨어 가속 에러시 플레이어 종료
+    public void onHardwareAccelerationError(IVLCVout vout) {
+        releasePlayer();
+        Toast.makeText(this, "Error with hardware acceleration", Toast.LENGTH_LONG).show();
+    }
+
+
+    //VLC 플레이어 실행
+    private void createPlayer() {
+        releasePlayer();
+        try {
+            if (this.videoSrc.length() > 0) {
+                Toast toast = Toast.makeText(this, this.videoSrc, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
+                        0);
+                toast.show();
+            }
+
+            // Create LibVLC
+            ArrayList<String> options = new ArrayList<String>();
+            //options.add("--subsdec-encoding <encoding>");
+//            options.add("--aout=opensles");
+            options.add("--rtsp-tcp"); // time stretching
+            options.add("-vvv"); // verbosity
+            libvlc = new LibVLC(this.getApplicationContext(),options);
+
+            textureView.setKeepScreenOn(true);
+
+            // Create media player
+            mediaPlayer = new MediaPlayer(libvlc);
+
+            // Set up video output
+            final IVLCVout vout = mediaPlayer.getVLCVout();
+            vout.setVideoView(textureView);
+            vout.addCallback(this);
+            vout.attachViews();
+            Uri url = Uri.parse(this.videoSrc);
+            Media m = new Media(libvlc, url);
+            mediaPlayer.setMedia(m);
+            mediaPlayer.play();
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Error creating player!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //플레이어 종료
+    private void releasePlayer() {
+        if (libvlc == null)
+            return;
+        mediaPlayer.stop();
+        final IVLCVout vout = mediaPlayer.getVLCVout();
+        vout.removeCallback(this);
+        vout.detachViews();
+        libvlc.release();
+        libvlc = null;
+        finish();
+    }
+
 }
