@@ -727,12 +727,12 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
     private void createPlayer() {
         releasePlayer();
         try {
-            if (this.videoSrc.length() > 0) {
-                Toast toast = Toast.makeText(this, this.videoSrc, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
-                        0);
-                toast.show();
-            }
+//            if (this.videoSrc.length() > 0) {
+//                Toast toast = Toast.makeText(this, this.videoSrc, Toast.LENGTH_LONG);
+//                toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,
+//                        0);
+//                toast.show();
+//            }
 
             // Create LibVLC
             ArrayList<String> options = new ArrayList<String>();

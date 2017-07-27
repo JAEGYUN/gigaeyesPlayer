@@ -123,4 +123,8 @@ cordova.plugins.gigaeyesplayer.play("rtsp://10.0.0.100:554/video", 'cam_01', '2�
 * type : favorites // 즐겨찾기
 * action : Y (register) , N (release)
 
+## 플러그인 종료시 이벤트
+* type : result // 플러그인 종료
+* action : ok
+
 

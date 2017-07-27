@@ -1,9 +1,9 @@
 package kr.co.anylogic.mediaplayer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import kr.co.anylogic.mediaplayer.GigaeyesConstants;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -53,6 +53,29 @@ public class GigaeyesPlayer extends CordovaPlugin {
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Log.d(TAG,"Result: "+resultCode);
+
+        if (resultCode == Activity.RESULT_CANCELED || resultCode == Activity.RESULT_OK )  {
+            Log.d(TAG, "OK");
+            try {
+                JSONObject obj = new JSONObject();
+                obj.put("type", "result");
+                obj.put("camId", GigaeyesPlayer.camId);
+                obj.put("action", "ok");
+                PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, obj);
+                pluginResult.setKeepCallback(true);
+                callbackContext.sendPluginResult(pluginResult);
+            }catch (JSONException e) {
+                Log.e("ERR", "execute: Got JSON Exception " + e.getMessage());
+                callbackContext.error(e.getMessage());
+            }
+        } else {
+            Log.d(TAG, "error");
+            callbackContext.error("Failed");
+        }
+    }
 
     private void coolMethod(String message, CallbackContext callbackContext) {
         if (message != null && message.length() > 0) {
