@@ -554,6 +554,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
     void clickBtn1(){
 //      뒤로가기
         releasePlayer();
+        finish();
     }
 
     void clickBtn2(){
@@ -739,7 +740,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
 //            options.add("--aout=opensles");
             options.add("--rtsp-tcp"); // time stretching
             options.add("-vvv"); // verbosity
-            libvlc = new LibVLC(this.getApplicationContext(),options);
+            libvlc = new LibVLC(options);
 
             textureView.setKeepScreenOn(true);
 
@@ -763,6 +764,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
 
     //플레이어 종료
     private void releasePlayer() {
+        Log.d(TAG, "player release!!!");
         if (libvlc == null)
             return;
         mediaPlayer.stop();
@@ -771,7 +773,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
         vout.detachViews();
         libvlc.release();
         libvlc = null;
-        finish();
+
     }
 
 }
