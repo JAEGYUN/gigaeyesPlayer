@@ -356,7 +356,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
                 curObj.coord = new ArrayList<Point>();
                 JSONObject roi_obj = sensor_objs.getJSONObject(j);
                 curObj.id = roi_obj.getString("sensor_id");
-                curObj.type = Integer.parseInt(roi_obj.getString("sensor_type_cd"));
+                curObj.type = Integer.parseInt(roi_obj.getString("sensor_tag_cd"));
                 if(j == 0 ){
                     iotFlag = true;
                 }
