@@ -36,14 +36,13 @@ public class VAView extends View {
         private void draw(Canvas cv){
             // 라인대신 이미지로 대체
             Bitmap dimg;
-            if(type == 11 || type == 14){               // In
+            if(type == 11 || type == 14 || type == 18 || type == 102){               // In
                 dimg = lineLeft;
-            }else if(type == 12 || type == 15){         // Out
+            }else if(type == 12 || type == 15 || type == 19){         // Out
                 dimg = lineOut;
             }else {
                 dimg = lineInOut;
             }
-
             Point p1 = points.get(0);
             Point p2 = points.get(1);
 //          두점 사이의 기울기 계산
@@ -57,14 +56,23 @@ public class VAView extends View {
             pa.setARGB(0xff, 0xf0, 0x46, 0x46);
             pa.setStrokeWidth(12f);
 //          가운데 점 구하기
+            double z = degree / 90; // 0,1,2,3
+            double a = 90 - (degree % 90);
+            double buf = 20 - (20/90*a);
             int x1 = p1.x+(p2.x-p1.x)/2;
-            int y1 = p1.y+(p2.y-p1.y)/2-20;
-
+            int y1 = p1.y+(p2.y-p1.y)/2;
+            if(z%2==0){
+                y1 = y1-(int)buf;
+            }else{
+                y1 = y1+(int)buf;
+            }
+            Log.d(TAG, "degree : "+degree+", type:" +type+", 좌표계 :"+(int)z+", 오차율 :");
 //            Log.d("두점사이의 가운데 점","p3("+x1+","+y1+")");
             cv.drawLine(p1.x, p1.y, p2.x, p2.y, pa);
 
 
             Log.d(TAG, "distance::"+distance+", to Int:"+(int)distance);
+            Log.d(TAG, "degree::"+degree+", to Int:"+(int)degree);
             Matrix matrix = new Matrix();
             matrix.postRotate((float)degree);
             matrix.postTranslate(x1, y1);
@@ -76,9 +84,27 @@ public class VAView extends View {
     private class Poly {
         public int type;
         public ArrayList<Point> points;
+        private int color = Color.parseColor("#46FF962E");
+        private Paint paint;
         Poly(int t, ArrayList<Point> p){
-            type = t;
-            points = p;
+            this.type = t;
+            this.points = p;
+            if(type == 22){
+                this.color = Color.parseColor("#46FF962E");
+            }else if(type == 23){
+                this.color = Color.parseColor("#46A75BCB");
+            }else if(type == 24){
+                this.color = Color.parseColor("#46FF962E");
+            }else if(type == 25){
+                this.color = Color.parseColor("#465AAAC7");
+            }else if(type == 26){
+                this.color = Color.parseColor("#46969696");
+            }else {     // 21
+                this.color = Color.parseColor("#4636B255");
+            }
+            this.paint = new Paint();
+            this.paint.setColor(this.color);
+            this.paint.setStyle(Paint.Style.FILL);
         }
         private void draw(Canvas cv){
             Path path = new Path();
@@ -93,44 +119,38 @@ public class VAView extends View {
                 path.lineTo(pt.x, pt.y);
             }
             path.close();
+//
+//            Paint paint = new Paint();
 
-            Paint paint = new Paint();
-            if(type == 22){
-                paint.setColor(Color.parseColor("#46ff962e"));
-            }else if(type == 23){
-                paint.setColor(Color.parseColor("#46a75bcb"));
-            }else if(type == 24){
-                paint.setColor(Color.parseColor("#46ff962e"));
-            }else if(type == 25){
-                paint.setColor(Color.parseColor("#465aaac7"));
-            }else if(type == 26){
-                paint.setColor(Color.parseColor("#46969696"));
-            }else {     // 21
-                paint.setColor(Color.parseColor("#4636b255"));
-            }
-            cv.drawPath(path, paint);
+//            paint.setStyle(Paint.Style.FILL);
+//            int color = Color.parseColor("#46FF962E");
+//            Log.d(TAG, "color base :"+color+", type : "+type);
+//
+//            Log.d(TAG, "color change :"+color+", type : "+type);
+//            paint.setColor(color);
+            cv.drawPath(path, this.paint);
 
 
-            Paint paint1 = new Paint();
-            paint1.setColor(Color.RED);
-            paint1.setStrokeWidth(5);
-            paint.setStyle(Paint.Style.STROKE);
+//            Paint paint1 = new Paint();
+//            paint1.setColor(Color.RED);
+//            paint1.setStrokeWidth(5);
+//            paint.setStyle(Paint.Style.STROKE);
 
-            int i2 = 0;
-            Point spt =  new Point();
-            Point ept ;
-            for(Point pt : points) {
-                if(i2 == 0){
-                    spt = pt;
-                    i2++;
-                    continue;
-                }
-                ept = pt;
-                cv.drawLine(spt.x, spt.y, ept.x, ept.y, paint1);
-                spt = ept;
-            }
-            ept = points.get(0);
-            cv.drawLine(spt.x, spt.y, ept.x, ept.y, paint1);
+//            int i2 = 0;
+//            Point spt =  new Point();
+//            Point ept ;
+//            for(Point pt : points) {
+//                if(i2 == 0){
+//                    spt = pt;
+//                    i2++;
+//                    continue;
+//                }
+//                ept = pt;
+//                cv.drawLine(spt.x, spt.y, ept.x, ept.y, this.paint);
+//                spt = ept;
+//            }
+//            ept = points.get(0);
+//            cv.drawLine(spt.x, spt.y, ept.x, ept.y, this.paint);
         }
     }
 
@@ -167,9 +187,11 @@ public class VAView extends View {
         ccv = cv;
         for(Object o : objects){
             if(o instanceof Line){
+
                 ((Line)o).draw(cv);
             }
             if(o instanceof Poly){
+                Log.d(TAG,"color >>>"+((Poly) o).color);
                 ((Poly)o).draw(cv);
             }
         }

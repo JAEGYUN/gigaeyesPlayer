@@ -225,11 +225,13 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
             vaView = new VAView(this);
             vaLayer.addView(vaView);
 
-            if(iotFlag) {
+            if(vaFlag) {
                 for(ROI_OBJ roiValue : ROI_INFO) {
                     if(roiValue.type == 11 || roiValue.type == 12 || roiValue.type == 13 ||         // draw line 모두 빨강색으로
-                        roiValue.type == 14 || roiValue.type == 15 || roiValue.type == 16  ){
+                        roiValue.type == 14 || roiValue.type == 15 || roiValue.type == 16 ||
+                        roiValue.type == 18 || roiValue.type == 19 || roiValue.type == 102 ){
                         ArrayList<Point> pts = new ArrayList<Point>();
+
                         for(Point pt : roiValue.coord){
                             int x = fullWidth * pt.x / 100000;
                             int y = fullHeight * pt.y / 100000;
@@ -238,7 +240,10 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
                         }
                         vaView.pushLine(roiValue.type,  pts);
                     }else if(roiValue.type == 21 || roiValue.type == 22 || roiValue.type == 23 ||         // draw poligon
-                            roiValue.type == 24 || roiValue.type == 25 || roiValue.type == 26  ) {
+                            roiValue.type == 24 || roiValue.type == 25 || roiValue.type == 26 ||
+                            roiValue.type == 105 || roiValue.type == 106 || roiValue.type == 108 ||
+                            roiValue.type == 109 || roiValue.type == 110 || roiValue.type == 111 ||
+                            roiValue.type == 112 ) {
                         ArrayList<Point> pts = new ArrayList<Point>();
                         for(Point pt : roiValue.coord){
                             int x = fullWidth * pt.x / 100000;
@@ -324,7 +329,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
         try {
             // ROI INFO parsing.
             JSONArray roi_objs = new JSONArray(this.roi_info); 
-            Log.d(TAG, "jsonstr(roi)>>>"+this.roi_info);
+            Log.d(TAG, "ROI FLAG ::: jsonstr(roi)>>>"+this.roi_info);
             for(int j = 0; j < roi_objs.length(); j++){
                 ROI_OBJ curObj = new ROI_OBJ();
                 curObj.coord = new ArrayList<Point>();
@@ -349,8 +354,8 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
             }
 
              // SENSOR INFO parsing.
-            JSONArray sensor_objs = new JSONArray(this.sensor_info); 
-            
+            JSONArray sensor_objs = new JSONArray(this.sensor_info);
+            Log.d(TAG, "jsonstr(roi)>>>"+this.sensor_info);
             for(int j = 0; j < sensor_objs.length(); j++){
                 ROI_OBJ curObj = new ROI_OBJ();
                 curObj.coord = new ArrayList<Point>();
@@ -470,7 +475,6 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
             int btn_on_off = res.getIdentifier(GigaeyesConstants.button.ONOFF, GigaeyesConstants.ID, this.packageName);
             int btn_va = res.getIdentifier(GigaeyesConstants.button.VA, GigaeyesConstants.ID, this.packageName);
             int btn_iot = res.getIdentifier(GigaeyesConstants.button.IOT, GigaeyesConstants.ID, this.packageName);
-            int btn_capture = res.getIdentifier(GigaeyesConstants.button.CAPTURE, GigaeyesConstants.ID, this.packageName);
             int btn_star = res.getIdentifier(GigaeyesConstants.button.STAR, GigaeyesConstants.ID, this.packageName);
             int ico_camera_on = res.getIdentifier(GigaeyesConstants.image.ICO_CAMERA_ON, GigaeyesConstants.IMAGE, this.packageName);
             int ico_camera_off = res.getIdentifier(GigaeyesConstants.image.ICO_CAMERA_OFF, GigaeyesConstants.IMAGE, this.packageName);
@@ -513,8 +517,8 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
                 ImageButton btnva = (ImageButton)findViewById(btn_va);
 //              IoT버튼이 없으면 위치 한칸 이동
                 if(!iotFlag){
-                    ImageButton btnCapture = (ImageButton)findViewById(btn_capture);
-                    btnva.setLayoutParams(btnCapture.getLayoutParams());
+                    ImageButton btniot = (ImageButton)findViewById(btn_iot);
+                    btnva.setLayoutParams(btniot.getLayoutParams());
                 }
                 if(vaViewFlag){
                     btnva.setImageResource(ico_va_on);
