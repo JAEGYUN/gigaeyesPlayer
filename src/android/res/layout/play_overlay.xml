@@ -7,9 +7,9 @@
 
     <ImageButton
         android:id="@+id/btn_back"
-        android:layout_width="38dp"
-        android:layout_height="35dp"
-        android:layout_marginLeft="20dp"
+        android:layout_width="25dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
         android:background="@android:color/transparent"
         android:layout_marginTop="12dp"
         android:scaleType="centerCrop"
@@ -18,13 +18,13 @@
 
     <ImageButton
         android:id="@+id/btn_onoff"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ico_cameraoff"
         android:scaleType="centerCrop"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/btn_back"
         />
 
@@ -42,50 +42,50 @@
 
     <ImageButton
         android:id="@+id/btn_star"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/starbutton"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ico_star"
         android:scaleType="centerCrop"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="18dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
         />
 
     <ImageButton
         android:id="@+id/btn_capture"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ico_capture"
         android:scaleType="centerCrop"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="18dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="10dp"
         android:layout_toLeftOf="@id/btn_star"
-        />
-
-
-    <ImageButton
-        android:id="@+id/btn_va"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:src="@drawable/ico_va"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="18dp"
-        android:scaleType="centerCrop"
-        android:layout_toLeftOf="@id/btn_capture"
         />
 
     <ImageButton
         android:id="@+id/btn_iot"
-        android:layout_width="45dp"
-        android:layout_height="wrap_content"
+        android:layout_width="42dp"
+        android:layout_height="22dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toLeftOf="@id/btn_capture"
         android:background="@android:color/transparent"
-        android:src="@drawable/ico_iot"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="18dp"
         android:scaleType="centerCrop"
-        android:layout_toLeftOf="@id/btn_va"
-        />
+        android:src="@drawable/ico_iot" />
+
+    <ImageButton
+        android:id="@+id/btn_va"
+        android:layout_width="35dp"
+        android:layout_height="22dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toLeftOf="@id/btn_iot"
+        android:background="@android:color/transparent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ico_va" />
+
+
 
 </RelativeLayout>
