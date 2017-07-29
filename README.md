@@ -9,26 +9,7 @@ Gigaeyes 프로젝트에서 사용되는 Cordova RTSP Player 플러그인 입니
 ## install
 ionic cordova plugin add https://github.com/JAEGYUN/gigaeyesPlayer.git
 
-## android build (Android Studio)
-
-add code in build.gradle(Module:android)
-
-```
-buildscript {
-    repositories{
-        ...
-        maven {
-            url 'https://maven.google.com'
-        }
-    }
-    ...
-}
-...
-dependencies {
-    ...
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-}     
-```
+## libVLC 지원 (only Android)
 
 ## Using
 
