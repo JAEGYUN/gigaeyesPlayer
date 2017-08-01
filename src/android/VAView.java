@@ -45,29 +45,53 @@ public class VAView extends View {
             }
             Point p1 = points.get(0);
             Point p2 = points.get(1);
-//          두점 사이의 기울기 계산
             double theta = Math.atan2((p2.y - p1.y), (p2.x - p1.x));
             double degree = (theta*180)/Math.PI;
 //          두점 사이의 길이 계산 --> 이미지 사이즈 변경기준
             double distance = Math.sqrt(Math.pow(Math.abs(p2.x-p1.x),2)+Math.pow(Math.abs(p2.y-p1.y),2));
-//            Log.d("두점사이의 거리","p1("+p1.x+","+p1.y+"), p2("+p2.x+","+p2.y+")-->"+distance+", bitmap.width"+dimg.getWidth());
-//            Log.d("두점사이의 기울기","p1("+p1.x+","+p1.y+"), p2("+p2.x+","+p2.y+")-->"+theta+", degree"+degree);
             Paint pa = new Paint();
             pa.setARGB(0xff, 0xf0, 0x46, 0x46);
             pa.setStrokeWidth(12f);
 //          가운데 점 구하기
-            double z = degree / 90; // 0,1,2,3
-            double a = 90 - (degree % 90);
+            double z = degree / 90+1; // 1,2,-1,-2
+            double a = degree % 90;
             double buf = 20 - (20/90*a);
             int x1 = p1.x+(p2.x-p1.x)/2;
             int y1 = p1.y+(p2.y-p1.y)/2;
-            if(z%2==0){
-                y1 = y1-(int)buf;
+
+//          기울기 및 좌표계에 따라 가운데 화살표 위치 변경
+            if(Math.abs(degree)>=0 && Math.abs(degree)<90){
+
+                if(Math.abs(degree)>0){
+                    x1 = x1 - (int)buf;
+                    y1 = y1 - (int)buf;
+                 }else{
+                    y1 = y1 - (int)buf;
+                }
+
+
             }else{
-                y1 = y1+(int)buf;
+
+                if(Math.abs(degree) > 90){
+                    y1 = y1 + (int) buf;
+                    if(z>0){
+                        x1 = x1 +(int)buf;
+                    }else{
+                        x1 = x1 -(int)buf;
+                    }
+
+                }else if(Math.abs(degree) == 180){
+                    y1 = y1 + (int) buf;
+                }else{
+                    if(z > 0){
+                        x1 = x1 + (int)buf;
+                    }else{
+                        x1 = x1 - (int)buf;
+                    }
+                }
+
             }
-            Log.d(TAG, "degree : "+degree+", type:" +type+", 좌표계 :"+(int)z+", 오차율 :");
-//            Log.d("두점사이의 가운데 점","p3("+x1+","+y1+")");
+
             cv.drawLine(p1.x, p1.y, p2.x, p2.y, pa);
 
 
@@ -119,38 +143,30 @@ public class VAView extends View {
                 path.lineTo(pt.x, pt.y);
             }
             path.close();
-//
-//            Paint paint = new Paint();
 
-//            paint.setStyle(Paint.Style.FILL);
-//            int color = Color.parseColor("#46FF962E");
-//            Log.d(TAG, "color base :"+color+", type : "+type);
-//
-//            Log.d(TAG, "color change :"+color+", type : "+type);
-//            paint.setColor(color);
             cv.drawPath(path, this.paint);
 
+//영역 외곽선 그리기
+            Paint paint1 = new Paint();
+            paint1.setColor(Color.RED);
+            paint1.setStrokeWidth(1);
+            paint.setStyle(Paint.Style.STROKE);
 
-//            Paint paint1 = new Paint();
-//            paint1.setColor(Color.RED);
-//            paint1.setStrokeWidth(5);
-//            paint.setStyle(Paint.Style.STROKE);
-
-//            int i2 = 0;
-//            Point spt =  new Point();
-//            Point ept ;
-//            for(Point pt : points) {
-//                if(i2 == 0){
-//                    spt = pt;
-//                    i2++;
-//                    continue;
-//                }
-//                ept = pt;
-//                cv.drawLine(spt.x, spt.y, ept.x, ept.y, this.paint);
-//                spt = ept;
-//            }
-//            ept = points.get(0);
-//            cv.drawLine(spt.x, spt.y, ept.x, ept.y, this.paint);
+            int i2 = 0;
+            Point spt =  new Point();
+            Point ept ;
+            for(Point pt : points) {
+                if(i2 == 0){
+                    spt = pt;
+                    i2++;
+                    continue;
+                }
+                ept = pt;
+                cv.drawLine(spt.x, spt.y, ept.x, ept.y, paint1);
+                spt = ept;
+            }
+            ept = points.get(0);
+            cv.drawLine(spt.x, spt.y, ept.x, ept.y, paint1);
         }
     }
 

@@ -5,14 +5,4 @@
     android:layout_height="match_parent"
     android:id="@+id/lay_iot">
 
-<!--
-    <ImageView
-        android:id="@+id/img_draw"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#00000000"
-        android:src="@drawable/ico_gate"
-        app:srcCompat="@android:drawable/screen_background_dark" />
--->
-
 </RelativeLayout>
