@@ -12,6 +12,8 @@
       </config-file>
       <header-file src="src/ios/GigaeyesPlayer.h" />
       <source-file src="src/ios/GigaeyesPlayer.m" />
+      <header-file src="src/ios/UIColor+Extension.h" />
+      <source-file src="src/ios/UIColor+Extension.m" />
       <header-file src="src/ios/PlayerViewController.h" />
       <source-file src="src/ios/PlayerViewController.m" />
       <resource-file src="src/ios/PlayerViewController.xib" />
