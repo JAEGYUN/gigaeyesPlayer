@@ -18,7 +18,7 @@
       <resource-file src="src/ios/res/btn_back1.png" />
       <source-file src="src/ios/res/btn_back3.png" />
       <source-file src="src/ios/res/ico_arrow_left.png"  />
-      <source-file src="ssrc/ios/res/ico_arrow_leftright.png"  />
+      <source-file src="src/ios/res/ico_arrow_leftright.png"  />
       <source-file src="src/ios/res/ico_arrow_right.png"  />
       <source-file src="src/ios/res/ico_cameraoff.png" />
       <source-file src="src/ios/res/ico_cameraon.png"  />
