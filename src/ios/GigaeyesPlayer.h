@@ -5,7 +5,7 @@
 
 @interface GigaeyesPlayer : CDVPlugin
 
-- (void) watch : (CDVInvokedUrlCommand*) command;
+- (void) play : (CDVInvokedUrlCommand*) command;
 - (void) finishOkAndDismiss;
 
 @property (strong,nonatomic) CDVInvokedUrlCommand* lastCommand;

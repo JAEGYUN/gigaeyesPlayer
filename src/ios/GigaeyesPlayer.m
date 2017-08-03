@@ -2,7 +2,7 @@
 
 @implementation GigaeyesPlayer
 
--(void) watchPanorama:(CDVInvokedUrlCommand*) command{
+-(void) play:(CDVInvokedUrlCommand*) command{
     NSString * playType = @"normal";
     
 //확인 예제 코드 : 웹뷰에서 전달한 URL이 전달되었는지를 확인한다.
@@ -23,15 +23,21 @@
     // 뷰컨트럴러에서 참조할 내용 생성(URL).
     self.overlay.origem = self;
     self.overlay.videoAddress = [command argumentAtIndex:0];
+    NSLog(@"Param1 %@",[command argumentAtIndex:0]);
     self.overlay.camId = [command argumentAtIndex:1];
+    NSLog(@"Param2 %@",[command argumentAtIndex:1]);
     self.overlay.camName = [command argumentAtIndex:2];
+    NSLog(@"Param3 %@",[command argumentAtIndex:2]);
     self.overlay.roiInfo = [command argumentAtIndex:3];
+    NSLog(@"Param4 %@",[command argumentAtIndex:3]);
     self.overlay.sensorInfo = [command argumentAtIndex:4];
+    NSLog(@"Param5 %@",[command argumentAtIndex:4]);
     self.overlay.recordStatus = [command argumentAtIndex:5];
+    NSLog(@"Param6 %@",[command argumentAtIndex:5]);
     self.overlay.isFavorites = [command argumentAtIndex:6];
     self.overlay.playType = playType;
     
-    NSLog(@"%@",[command argumentAtIndex:0]);
+    NSLog(@"Param7 %@",[command argumentAtIndex:6]);
     
 //  현재 뷰를 자신으로 활성화
     [self.viewController presentViewController:self.overlay animated:YES completion:nil];

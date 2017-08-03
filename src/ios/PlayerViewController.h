@@ -18,5 +18,6 @@
 @property (retain, nonatomic) NSString* sensorInfo;
 @property (retain, nonatomic) NSString* recordStatus;
 @property (retain, nonatomic) NSString* isFavorites;
+@property (assign, nonatomic) BOOL shouldRotate;
 
 @end
