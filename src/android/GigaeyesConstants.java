@@ -65,4 +65,9 @@ public class GigaeyesConstants {
     public static final String IOT_LAYER_ID = "lay_iot";
     public static final String TEXTURE_VIEW = "textureView";
     public static final String TITLE = "camName";
+    public static final String BRIGHTNESS_BAR = "brightnessBar";
+    public static final String BRIGHTNESS_STATUS = "brightStatus";
+    public static final String VOLUME_BAR = "volumeBar";
+    public static final String VOLUME_STATUS = "volumeStatus";
+
 }

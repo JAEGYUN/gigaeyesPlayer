@@ -11,9 +11,11 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.SurfaceTexture;
+import android.media.AudioManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 //import android.widget.SeekBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +81,14 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
     boolean iotFlag = false;
 //  ROI 등록유무
     boolean vaFlag = false;
+
+    SeekBar brightnessBar;
+    int brightnessCount = 100;
+    private TextView brightStatus;
+
+    SeekBar volumeBar;
+    int volumeCount = 0;
+    private TextView volumeStatus;
 
     private String videoSrc = "";
     private String cctvName = "";
@@ -466,6 +477,11 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
         if (visible) {
             if(clickedFlag)
                 return;
+            int brightnessId =res.getIdentifier(GigaeyesConstants.BRIGHTNESS_BAR, GigaeyesConstants.ID, this.packageName);
+            int brightStatusId =res.getIdentifier(GigaeyesConstants.BRIGHTNESS_STATUS, GigaeyesConstants.ID, this.packageName);
+
+            int volumeBarId =res.getIdentifier(GigaeyesConstants.VOLUME_BAR, GigaeyesConstants.ID, this.packageName);
+            int volumeStatusId =res.getIdentifier(GigaeyesConstants.VOLUME_STATUS, GigaeyesConstants.ID, this.packageName);
 
             // addContentView를 호출한다.
             inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -554,8 +570,78 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
                 h.postDelayed(mNavHider, GigaeyesConstants.DELAY_TIME);
             }
             clickedFlag = true;
+
+
+
+            brightnessBar = (SeekBar)findViewById(brightnessId);
+
+            brightnessBar.setProgress(this.brightnessCount) ;
+
+
+            this.brightStatus = (TextView)findViewById(brightStatusId);
+            brightStatus.setText(this.brightnessCount+" %");
+
+            brightnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar){
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar){
+
+                }
+
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+                    if(progress < 10){
+                        progress = 10;
+                        seekBar.setProgress(progress);
+                    }
+
+                    WindowManager.LayoutParams params = getWindow().getAttributes();
+                    params.screenBrightness = (float) progress /100;
+                    getWindow().setAttributes(params);
+
+                    brightStatus.setText(progress+" %");
+                    brightnessCount = progress;
+
+                }
+            });
+
+            volumeBar = (SeekBar)findViewById(volumeBarId);
+
+            volumeBar.setProgress(this.volumeCount) ;
+            mediaPlayer.setVolume(this.volumeCount) ;
+            this.volumeStatus = (TextView)findViewById(volumeStatusId);
+            volumeStatus.setText(this.volumeCount+" %");
+
+            volumeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar){
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar){
+
+                }
+
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
+
+                    mediaPlayer.setVolume(progress);
+
+                    volumeStatus.setText(progress+" %");
+                    volumeCount= progress;
+
+                }
+            });
+
         }
     }
+
+
 
 
     void clickBtn1(){

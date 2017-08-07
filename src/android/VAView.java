@@ -109,7 +109,8 @@ public class VAView extends View {
         public int type;
         public ArrayList<Point> points;
         private int color = Color.parseColor("#46FF962E");
-        private Paint paint;
+        private Paint fillPaint;
+        private Paint linePaint;
         Poly(int t, ArrayList<Point> p){
             this.type = t;
             this.points = p;
@@ -126,13 +127,18 @@ public class VAView extends View {
             }else {     // 21
                 this.color = Color.parseColor("#4636B255");
             }
-            this.paint = new Paint();
-            this.paint.setColor(this.color);
-            this.paint.setStyle(Paint.Style.FILL);
+            this.fillPaint = new Paint();
+            this.fillPaint.setColor(this.color);
+            this.fillPaint.setStyle(Paint.Style.FILL);
+            this.linePaint = new Paint();
+            this.linePaint.setColor(Color.RED);
+            this.linePaint.setStrokeWidth(3);
+            this.linePaint.setStyle(Paint.Style.STROKE);
         }
         private void draw(Canvas cv){
             Path path = new Path();
             path.setFillType(Path.FillType.EVEN_ODD);
+
             int i = 0;
             for(Point pt : points) {
                 if(i == 0){
@@ -144,13 +150,13 @@ public class VAView extends View {
             }
             path.close();
 
-            cv.drawPath(path, this.paint);
+            cv.drawPath(path, this.fillPaint);
 
 //영역 외곽선 그리기
-            Paint paint1 = new Paint();
-            paint1.setColor(Color.RED);
-            paint1.setStrokeWidth(1);
-            paint.setStyle(Paint.Style.STROKE);
+//            Paint paint1 = new Paint();
+//            paint1.setColor(Color.RED);
+//            paint1.setStrokeWidth(1);
+//            paint.setStyle(Paint.Style.STROKE);
 
             int i2 = 0;
             Point spt =  new Point();
@@ -162,11 +168,11 @@ public class VAView extends View {
                     continue;
                 }
                 ept = pt;
-                cv.drawLine(spt.x, spt.y, ept.x, ept.y, paint1);
+                cv.drawLine(spt.x, spt.y, ept.x, ept.y, this.linePaint);
                 spt = ept;
             }
             ept = points.get(0);
-            cv.drawLine(spt.x, spt.y, ept.x, ept.y, paint1);
+            cv.drawLine(spt.x, spt.y, ept.x, ept.y, this.linePaint);
         }
     }
 
