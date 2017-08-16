@@ -53,6 +53,7 @@
    <platform name="android">
       <framework src="com.android.support.constraint:constraint-layout:1.0.2" />
       <framework src="de.mrmaffen:vlc-android-sdk:1.9.8" />
+      <framework src="com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2" />
       <config-file parent="/*" target="res/xml/config.xml">
          <feature name="GigaeyesPlayer">
             <param name="android-package" value="kr.co.anylogic.mediaplayer.GigaeyesPlayer" />

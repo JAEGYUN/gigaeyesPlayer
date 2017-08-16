@@ -212,14 +212,19 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        int main_container = res.getIdentifier(GigaeyesConstants.MAIN_CONTAINER, GigaeyesConstants.ID, this.packageName);
-        View layoutMainView = (View)this.findViewById(main_container);
+//        int main_container = res.getIdentifier(GigaeyesConstants.MAIN_CONTAINER, GigaeyesConstants.ID, this.packageName);
+//        int texture_view = res.getIdentifier(GigaeyesConstants.TEXTURE_VIEW, GigaeyesConstants.ID, this.packageName);
+//        View layoutMainView = (TextureView).findViewById(texture_view);
 
-        Log.w("Layout Width - ", String.valueOf(layoutMainView.getWidth()));
-        Log.w("Layout Height - ", String.valueOf(layoutMainView.getHeight()));
+        DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
 
-        drawVA(layoutMainView.getWidth(), layoutMainView.getHeight());
-        drawIoT(layoutMainView.getWidth(), layoutMainView.getHeight());
+//        Log.w("Layout Width - ", String.valueOf(layoutMainView.getWidth()));
+//        Log.w("Layout Height - ", String.valueOf(layoutMainView.getHeight()));
+
+        drawVA(width, height);
+        drawIoT(width, height);
     }
 
 
