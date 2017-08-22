@@ -41,7 +41,6 @@ import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 import org.videolan.libvlc.IVLCVout;
 import org.videolan.libvlc.LibVLC;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -52,6 +51,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import android.net.Uri;
+
+import com.bumptech.glide.Glide;
+
+import java.lang.ref.WeakReference;
+
+
 public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callback, TextureView.SurfaceTextureListener, View.OnTouchListener {
 
     //기본 위젯 설정및 변수 설정
@@ -64,10 +69,10 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
     private String packageName;
     private Resources res;
 
-//  안드로이드 MediaPlayer에서 VLC Player로 변경
+    //  안드로이드 MediaPlayer에서 VLC Player로 변경
     private MediaPlayer mediaPlayer;
     private TextureView textureView;
-
+    private static ImageView loadingView;
     public static String TAG = "GigaeyesPlayerActivity";
 
     LayoutInflater inflater;
@@ -77,9 +82,9 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
     RelativeLayout vaLayer;
     VAView vaView;
     boolean clickedFlag = false;
-//  센서 등록유무
+    //  센서 등록유무
     boolean iotFlag = false;
-//  ROI 등록유무
+    //  ROI 등록유무
     boolean vaFlag = false;
 
     SeekBar brightnessBar;
@@ -96,6 +101,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
     public static boolean vaViewFlag = false;
     public static boolean favFlag = false;
     public static boolean onoffFlag = true;
+    public static boolean isRecErr = false;
 
     ArrayList<ROI_OBJ> ROI_INFO = new ArrayList<ROI_OBJ>();
     ArrayList<ImageView> imgViews = new ArrayList<ImageView>();
@@ -120,7 +126,8 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
         this.res = getApplication().getResources();
         int main_layout = res.getIdentifier(GigaeyesConstants.MAIN_LAYOUT, GigaeyesConstants.LAYOUT, this.packageName);
         int texture_view = res.getIdentifier(GigaeyesConstants.TEXTURE_VIEW, GigaeyesConstants.ID, this.packageName);
-
+        int loading_view = res.getIdentifier(GigaeyesConstants.LOADING_VIEW, GigaeyesConstants.ID, this.packageName);
+        int loading_gif = res.getIdentifier("loading", "raw", this.packageName);
         if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
             return;
@@ -133,11 +140,13 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
             this.roi_info = extras.getString(GigaeyesConstants.ROI_INFO);
             this.sensor_info = extras.getString(GigaeyesConstants.SENSOR_INFO);
             this.onoffFlag = extras.getString(GigaeyesConstants.REC_STATUS) != null
-                    && GigaeyesConstants.STREAM_VALID_STATUS.equals(extras.getString(GigaeyesConstants.REC_STATUS));
+                    && GigaeyesConstants.STATUS_SUCCESS.equals(extras.getString(GigaeyesConstants.REC_STATUS));
+            this.isRecErr = extras.getString(GigaeyesConstants.REC_STATUS) != null
+                    && GigaeyesConstants.STATUS_EXCEPTION.equals(extras.getString(GigaeyesConstants.REC_STATUS));
             this.favFlag = extras.getString(GigaeyesConstants.FAVORITES) != null
                     && GigaeyesConstants.FAVORITES_ON.equals(extras.getString(GigaeyesConstants.FAVORITES));
         } else {
-           finishWithError();
+            finishWithError();
         }
 
 
@@ -151,6 +160,10 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
         textureView = (TextureView) findViewById(texture_view);
         textureView.requestFocus();
 
+        loadingView = (ImageView) findViewById(loading_view);
+//        loadingView.setImageResource(GigaeyesConstants.image);
+
+        Glide.with(this).load(loading_gif).into(loadingView);
         roiParsing();
 
         /*
@@ -228,6 +241,10 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
     }
 
 
+    public static void hideLoading(){
+        GigaeyesPlayerActivity.loadingView.setVisibility(View.INVISIBLE);
+    }
+
     private void drawVA(int fullWidth, int fullHeight) {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int va_layout = res.getIdentifier(GigaeyesConstants.VA_LAYOUT, GigaeyesConstants.LAYOUT, this.packageName);
@@ -244,8 +261,8 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
             if(vaFlag) {
                 for(ROI_OBJ roiValue : ROI_INFO) {
                     if(roiValue.type == 11 || roiValue.type == 12 || roiValue.type == 13 ||         // draw line 모두 빨강색으로
-                        roiValue.type == 14 || roiValue.type == 15 || roiValue.type == 16 ||
-                        roiValue.type == 18 || roiValue.type == 19 || roiValue.type == 102 ){
+                            roiValue.type == 14 || roiValue.type == 15 || roiValue.type == 16 ||
+                            roiValue.type == 18 || roiValue.type == 19 || roiValue.type == 102 ){
                         ArrayList<Point> pts = new ArrayList<Point>();
 
                         for(Point pt : roiValue.coord){
@@ -288,6 +305,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
         int ico_fire = res.getIdentifier(GigaeyesConstants.image.ICO_FIRE, GigaeyesConstants.IMAGE, this.packageName);
         int ico_temperature = res.getIdentifier(GigaeyesConstants.image.ICO_TEMPERATURE, GigaeyesConstants.IMAGE, this.packageName);
         int ico_humidity = res.getIdentifier(GigaeyesConstants.image.ICO_HUMIDITY, GigaeyesConstants.IMAGE, this.packageName);
+        int ico_gas = res.getIdentifier(GigaeyesConstants.image.ICO_GAS, GigaeyesConstants.IMAGE, this.packageName);
 
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -317,12 +335,14 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
                                 ivg.setBackgroundResource(ico_door);
                             } else if (roiValue.type == 10003) {   // 소리
                                 ivg.setBackgroundResource(ico_sound);
-                            } else if (roiValue.type == 10004) {   // 화재
-                                ivg.setBackgroundResource(ico_fire);
+                            } else if (roiValue.type == 10004) {   // 가스
+                                ivg.setBackgroundResource(ico_gas);
                             } else if (roiValue.type == 10005) {   // 온도
                                 ivg.setBackgroundResource(ico_temperature);
                             } else if (roiValue.type == 10006) {  // 습도
                                 ivg.setBackgroundResource(ico_humidity);
+                            } else if (roiValue.type == 10007) {  // 화재
+                                ivg.setBackgroundResource(ico_fire);
                             } else {
                                 Log.d(TAG,"요청유형의 센서는 지원되지 않습니다. ["+roiValue.type+"]");
                             }
@@ -344,7 +364,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
     void roiParsing(){
         try {
             // ROI INFO parsing.
-            JSONArray roi_objs = new JSONArray(this.roi_info); 
+            JSONArray roi_objs = new JSONArray(this.roi_info);
             Log.d(TAG, "ROI FLAG ::: jsonstr(roi)>>>"+this.roi_info);
             for(int j = 0; j < roi_objs.length(); j++){
                 ROI_OBJ curObj = new ROI_OBJ();
@@ -369,7 +389,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
                 ROI_INFO.add(curObj);
             }
 
-             // SENSOR INFO parsing.
+            // SENSOR INFO parsing.
             JSONArray sensor_objs = new JSONArray(this.sensor_info);
             Log.d(TAG, "jsonstr(roi)>>>"+this.sensor_info);
             for(int j = 0; j < sensor_objs.length(); j++){
@@ -499,6 +519,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
             int btn_star = res.getIdentifier(GigaeyesConstants.button.STAR, GigaeyesConstants.ID, this.packageName);
             int ico_camera_on = res.getIdentifier(GigaeyesConstants.image.ICO_CAMERA_ON, GigaeyesConstants.IMAGE, this.packageName);
             int ico_camera_off = res.getIdentifier(GigaeyesConstants.image.ICO_CAMERA_OFF, GigaeyesConstants.IMAGE, this.packageName);
+            int ico_camera_err = res.getIdentifier(GigaeyesConstants.image.ICO_CAMERA_ERR, GigaeyesConstants.IMAGE, this.packageName);
             int ico_star_on = res.getIdentifier(GigaeyesConstants.image.ICO_STAR_ON, GigaeyesConstants.IMAGE, this.packageName);
             int ico_star_off = res.getIdentifier(GigaeyesConstants.image.ICO_STAR_OFF, GigaeyesConstants.IMAGE, this.packageName);
             int ico_iot_on = res.getIdentifier(GigaeyesConstants.image.ICO_IOT, GigaeyesConstants.IMAGE, this.packageName);
@@ -513,8 +534,8 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
 
             rlTop = (RelativeLayout)inflater.inflate(control_overlay, null);
             getWindow().addContentView(rlTop, new RelativeLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT));
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
 
 
             TextView tv = (TextView)findViewById(title);
@@ -524,7 +545,12 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
             if(onoffFlag) {
                 btnOnoff.setImageResource(ico_camera_on);
             }else{
-                btnOnoff.setImageResource(ico_camera_off);
+                if(isRecErr){
+                    btnOnoff.setImageResource(ico_camera_err);
+                }else{
+                    btnOnoff.setImageResource(ico_camera_off);
+                }
+
             }
             ImageButton btnStar = (ImageButton)findViewById(btn_star);
             if(favFlag) {
@@ -838,13 +864,17 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
 //            options.add("--aout=opensles");
             options.add("--rtsp-tcp"); // time stretching
             options.add("-vvv"); // verbosity
+            options.add("--logo-file=loading.gif"); // verbosity
+
+            File dir = getApplication().getApplicationContext().getFilesDir();
+            Log.d(TAG,"dir>>>"+dir.getAbsolutePath()+", path>>>>"+dir.getPath());
             libvlc = new LibVLC(options);
 
             textureView.setKeepScreenOn(true);
 
             // Create media player
             mediaPlayer = new MediaPlayer(libvlc);
-
+            mediaPlayer.setEventListener(mPlayerListener);
             // Set up video output
             final IVLCVout vout = mediaPlayer.getVLCVout();
             vout.setVideoView(textureView);
@@ -859,6 +889,41 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
             Toast.makeText(this, "Error creating player!", Toast.LENGTH_LONG).show();
         }
     }
+
+    private MediaPlayer.EventListener mPlayerListener = new MyPlayerListener(this);
+
+    private static class MyPlayerListener implements MediaPlayer.EventListener {
+        private WeakReference<GigaeyesPlayerActivity> mOwner;
+
+        public MyPlayerListener(GigaeyesPlayerActivity owner) {
+            mOwner = new WeakReference<GigaeyesPlayerActivity>(owner);
+        }
+
+        @Override
+        public void onEvent(MediaPlayer.Event event) {
+            GigaeyesPlayerActivity player = mOwner.get();
+
+            switch(event.type) {
+                case MediaPlayer.Event.EndReached:
+                    Log.d(TAG, "MediaPlayerEndReached");
+                    player.releasePlayer();
+                    break;
+                case MediaPlayer.Event.Opening:
+                    Log.d(TAG,"loading bar open....");
+//                    GigaeyesPlayerActivity.hideLoading();
+                    break;
+                case MediaPlayer.Event.Playing:
+                    GigaeyesPlayerActivity.hideLoading();
+                    Log.d(TAG,"loading bar close....");
+                    break;
+                case MediaPlayer.Event.Paused:
+                case MediaPlayer.Event.Stopped:
+                default:
+                    break;
+            }
+        }
+    }
+
 
     //플레이어 종료
     private void releasePlayer() {

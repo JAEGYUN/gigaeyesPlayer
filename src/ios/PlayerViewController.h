@@ -14,8 +14,8 @@
 @property (retain, nonatomic) NSString* playType;
 @property (retain, nonatomic) NSString* camId;
 @property (retain, nonatomic) NSString* camName;
-@property (retain, nonatomic) NSString* roiInfo;
-@property (retain, nonatomic) NSString* sensorInfo;
+@property (retain, nonatomic) NSArray* roiInfo;
+@property (retain, nonatomic) NSArray* sensorInfo;
 @property (retain, nonatomic) NSString* recordStatus;
 @property (retain, nonatomic) NSString* isFavorites;
 @property (assign, nonatomic) BOOL shouldRotate;

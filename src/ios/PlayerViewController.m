@@ -7,6 +7,15 @@
     BOOL isHidden;
     BOOL enableFavorites;
     BOOL enableRecord;
+    BOOL enableIot;
+    BOOL enableVA;
+    BOOL isSchedule;
+    UIImage *door;
+    UIImage *sound;
+    UIImage *fire;
+    UIImage *motion;
+    UIImage *temperature;
+    UIImage *humidity;
     UIActivityIndicatorView *spinner;
     NSOperationQueue *opQueue;
 }
@@ -27,6 +36,8 @@
 @property (weak, nonatomic) IBOutlet UINavigationItem *navigationBarTitle;
 @property (weak, nonatomic) IBOutlet UIButton *favoritesButton;
 @property (weak, nonatomic) IBOutlet UIButton *recordStateButton;
+@property (weak, nonatomic) IBOutlet UIButton *iotButton;
+@property (weak, nonatomic) IBOutlet UIButton *vaButton;
 @property (nonatomic, assign) CGSize * currentSize;
 @property (nonatomic, assign) BOOL progressSilderTouching;
 @end
@@ -36,7 +47,7 @@
 // Load with xib :)
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-
+    
     enableFavorites = NO;
     enableRecord = NO;
     isHidden = NO;
@@ -48,7 +59,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    door = [UIImage imageNamed:@"ico_door.png"];
+    motion = [UIImage imageNamed:@"ico_theft.png"];
+    sound = [UIImage imageNamed:@"ico_sound.png"];
+    fire = [UIImage imageNamed:@"ico_fire.png"];
+    temperature = [UIImage imageNamed:@"ico_temperature.png"];
+    humidity = [UIImage imageNamed:@"ico_humidity.png"];
+
     // 플레이어 호출 부분
     self.view.backgroundColor = [UIColor blackColor];
     
@@ -57,41 +74,41 @@
     
     // callback handler 등록
     [self.player registerPlayerNotificationTarget:self
-                                stateAction:@selector(stateAction:)
-                                progressAction:@selector(progressAction:)
-                                playableAction:@selector(playableAction:)
-                                errorAction:@selector(errorAction:)];
-     [self.navigationBarTitle.title setValue:self.camName forKey:self.camName];
+                                      stateAction:@selector(stateAction:)
+                                   progressAction:@selector(progressAction:)
+                                   playableAction:@selector(playableAction:)
+                                      errorAction:@selector(errorAction:)];
+    [self.navigationBarTitle.title setValue:self.camName forKey:self.camName];
     // 탭하여 화면 재생
     [self.player setViewTapAction:^(SGPlayer * _Nonnull player, SGPLFView * _Nonnull view) {
         NSLog(@"player display view did click!");
         isHidden = !isHidden;
         [self hiddenBar];
-
+        
         
     }];
     
     
     [self.view insertSubview:self.player.view atIndex:0];
-
-    // 캠명...   
+    
+    // 캠명...
     self.navigationBarTitle.title = self.camName;
     
     NSLog(@"요청 URL %@", self.videoAddress);
     // URL을 UTF-8로 변환하여 저장(NSString --> NSURL)
     NSURL* urlString =  [NSURL URLWithString:[self.videoAddress stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
-
+    
     NSLog(@"요청 URL Check %@", [urlString absoluteString]);
     
     // 플레이어 디코더 선택...AVPlayer와 FFmepgDecoder 또는 모두 사용가능하나 FFmpeg을 사용하도록 설정
-     self.player.decoder =  [SGPlayerDecoder decoderByFFmpeg];
-//    self.player.decoder =  [SGPlayerDecoder decoderByDefault];
+    self.player.decoder =  [SGPlayerDecoder decoderByFFmpeg];
+    //    self.player.decoder =  [SGPlayerDecoder decoderByDefault];
     [self.player.decoder setFFmpegCodecContextOptionStringValue :@"tcp" forKey:@"rtsp_transport"];
     [self.player.decoder setFFmpegCodecContextOptionStringValue :@"prefer_tcp" forKey:@"rtsp_flags"];
     [self.player.decoder setFFmpegCodecContextOptionStringValue :@"0" forKey:@"timeout"];
     [self.player.decoder setFFmpegCodecContextOptionStringValue :@"video" forKey:@"allowed_media_types"];
     
-   // 하드웨어 가속
+    // 하드웨어 가속
     self.player.decoder.hardwareAccelerateEnableForFFmpeg = YES;
     // 자동재생
     // self.player.backgroundMode = SGPlayerBackgroundModeContinue;
@@ -104,129 +121,145 @@
     opQueue.maxConcurrentOperationCount = 1; // set to 1 to force everything to run on one thread;
     
     [self drawFavorites];
+    [self drawRecordStatus];
     
-//  VA 처리를 위한 Layer
+    //  VA 처리를 위한 Layer
     self.vaLayer = [CALayer layer];
-// IoT처리를 위한 Layer
+    // IoT처리를 위한 Layer
     self.iotLayer = [CALayer layer];
     
     self.screenWidth  = UIInterfaceOrientationIsPortrait(self.preferredInterfaceOrientationForPresentation)?
-                [[UIScreen mainScreen] bounds].size.height: [[UIScreen mainScreen] bounds].size.width;
+    [[UIScreen mainScreen] bounds].size.height: [[UIScreen mainScreen] bounds].size.width;
     
     self.screenHeight  = (CGFloat)UIInterfaceOrientationIsPortrait(self.preferredInterfaceOrientationForPresentation)?
-                [[UIScreen mainScreen] bounds].size.width: [[UIScreen mainScreen] bounds].size.height;
+    [[UIScreen mainScreen] bounds].size.width: [[UIScreen mainScreen] bounds].size.height;
     
     
     self.vaLayer.frame = CGRectMake(0, 0, self.screenWidth ,self.screenHeight);
     self.iotLayer.frame = CGRectMake(0, 0, self.screenWidth ,self.screenHeight);
     
-//    vaLayer.backgroundColor = [UIColor yellowColor].CGColor;
+    //    vaLayer.backgroundColor = [UIColor yellowColor].CGColor;
     
-//   뷰에 VA/IoT 레이어를 추가한다.
+    //   뷰에 VA/IoT 레이어를 추가한다.
     [self.view.layer addSublayer:self.vaLayer];
     [self.view.layer addSublayer:self.iotLayer];
     
-//    CAShapeLayer *line = [CAShapeLayer layer];
-//    
-//    long viewHeight = 200;
-//    
-//    //ROI 샘플코드
-//    UIBezierPath *path = [[UIBezierPath alloc] init];
-//    [path moveToPoint:CGPointMake(20, viewHeight-19.5)];
-//    [path addLineToPoint:CGPointMake(200, viewHeight-19.5)];
-//    [path addLineToPoint:CGPointMake(300, viewHeight-119.5)];
-//    [path addLineToPoint:CGPointMake(120, viewHeight-119.5)];
-//    [path addLineToPoint:CGPointMake(20, viewHeight-19.5)];
-//   
-//    
-//    [[UIColor colorWithRed:(248/255.0) green:(222/255.0) blue:(173/255.0) alpha:1.0] setFill];
-//    [path fill];
-//    [[UIColor colorWithRed:(170/255.0) green:(138/255.0) blue:(99/255.0) alpha:1.0] setStroke];
-//    [path stroke];
-//    
-//    line.path = path.CGPath;
-//    
-//    //이미지 샘플코드.
-//    UIImage* il =[UIImage imageNamed:@"ico_door.png"];
-//    CALayer * imageLayer = [CALayer layer];
-//    imageLayer.frame = CGRectMake(100, 300, 100, 100);
-//    imageLayer.opacity = 0.65;
-//    imageLayer.contents = (id)il.CGImage;
-//    [vaLayer addSublayer:imageLayer];
-//    
-//
-//    UIImage* il1 =[UIImage imageNamed:@"ico_fire.png"];
-//    UIImage *rotatedImage = [self imageRotatedByDegrees:il1 deg:90];
-//    
-//    CALayer * imageLayer1 = [CALayer layer];
-//    imageLayer1.frame = CGRectMake(300, 100, 100, 100);
-//    imageLayer1.opacity = 0.65;
-//    imageLayer1.contents = (id)rotatedImage.CGImage;
-// 
-//    
-//    
-//    [vaLayer addSublayer:imageLayer1];
-//    
-//    
-//    //  rotate 샘플코드
-//    CAShapeLayer * imageLayer2 = [CAShapeLayer layer];
-//    UIBezierPath *path1 = [[UIBezierPath alloc] init];
-//    [path1 moveToPoint:CGPointMake(0, 50)];
-//    [path1 addLineToPoint:CGPointMake(200, 50)];
-//    imageLayer2.lineWidth = 3;
-//    imageLayer2.path = path1.CGPath;
-//    imageLayer2.strokeColor = [UIColor redColor].CGColor;
-//    
-//    UIImage* il2 =[UIImage imageNamed:@"ico_arrow_left.png"];
-//    
-//    CALayer * imageLayer3 = [CALayer layer];
-//    imageLayer3.frame = CGRectMake(75, 30, 50, 50);
-//    imageLayer3.opacity = 0.65;
-//    imageLayer3.contents = (id)il2.CGImage;
-//    
-//    
-//    [imageLayer2 addSublayer:imageLayer3];
-//    
-//    CGFloat intVal = 10;
-////    CGAffineTransformMakeRotation(intVal);
-//    imageLayer2.affineTransform = CGAffineTransformMakeRotation(intVal);
-//    imageLayer2.frame = CGRectMake(200, 200, imageLayer2.bounds.size.width, imageLayer2.bounds.size.height);
-////    CGAffineTransformRotate(CGAffineTransform t, <#CGFloat angle#>)
-////    CGAffineTransformMakeRotation(intVal);
-//    [vaLayer addSublayer:line];
-//    [vaLayer addSublayer:imageLayer2];
-//    
-////    self.vaView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width,self.view.bounds.size.height)];
-////    [self.view addSubview:self.vaView];
-//    
-////    [self.view insertSubview:self.vaView atIndex:5];
-////    [self.view bringSubviewToFront:self.player.view];
-//
+    //    CAShapeLayer *line = [CAShapeLayer layer];
+    //
+    //    long viewHeight = 200;
+    //
+    //    //ROI 샘플코드
+    //    UIBezierPath *path = [[UIBezierPath alloc] init];
+    //    [path moveToPoint:CGPointMake(20, viewHeight-19.5)];
+    //    [path addLineToPoint:CGPointMake(200, viewHeight-19.5)];
+    //    [path addLineToPoint:CGPointMake(300, viewHeight-119.5)];
+    //    [path addLineToPoint:CGPointMake(120, viewHeight-119.5)];
+    //    [path addLineToPoint:CGPointMake(20, viewHeight-19.5)];
+    //
+    //
+    //    [[UIColor colorWithRed:(248/255.0) green:(222/255.0) blue:(173/255.0) alpha:1.0] setFill];
+    //    [path fill];
+    //    [[UIColor colorWithRed:(170/255.0) green:(138/255.0) blue:(99/255.0) alpha:1.0] setStroke];
+    //    [path stroke];
+    //
+    //    line.path = path.CGPath;
+    //
+    //    //이미지 샘플코드.
+    //    UIImage* il =[UIImage imageNamed:@"ico_door.png"];
+    //    CALayer * imageLayer = [CALayer layer];
+    //    imageLayer.frame = CGRectMake(100, 300, 100, 100);
+    //    imageLayer.opacity = 0.65;
+    //    imageLayer.contents = (id)il.CGImage;
+    //    [vaLayer addSublayer:imageLayer];
+    //
+    //
+    //    UIImage* il1 =[UIImage imageNamed:@"ico_fire.png"];
+    //    UIImage *rotatedImage = [self imageRotatedByDegrees:il1 deg:90];
+    //
+    //    CALayer * imageLayer1 = [CALayer layer];
+    //    imageLayer1.frame = CGRectMake(300, 100, 100, 100);
+    //    imageLayer1.opacity = 0.65;
+    //    imageLayer1.contents = (id)rotatedImage.CGImage;
+    //
+    //
+    //
+    //    [vaLayer addSublayer:imageLayer1];
+    //
+    //
+    //    //  rotate 샘플코드
+    //    CAShapeLayer * imageLayer2 = [CAShapeLayer layer];
+    //    UIBezierPath *path1 = [[UIBezierPath alloc] init];
+    //    [path1 moveToPoint:CGPointMake(0, 50)];
+    //    [path1 addLineToPoint:CGPointMake(200, 50)];
+    //    imageLayer2.lineWidth = 3;
+    //    imageLayer2.path = path1.CGPath;
+    //    imageLayer2.strokeColor = [UIColor redColor].CGColor;
+    //
+    //    UIImage* il2 =[UIImage imageNamed:@"ico_arrow_left.png"];
+    //
+    //    CALayer * imageLayer3 = [CALayer layer];
+    //    imageLayer3.frame = CGRectMake(75, 30, 50, 50);
+    //    imageLayer3.opacity = 0.65;
+    //    imageLayer3.contents = (id)il2.CGImage;
+    //
+    //
+    //    [imageLayer2 addSublayer:imageLayer3];
+    //
+    //    CGFloat intVal = 10;
+    ////    CGAffineTransformMakeRotation(intVal);
+    //    imageLayer2.affineTransform = CGAffineTransformMakeRotation(intVal);
+    //    imageLayer2.frame = CGRectMake(200, 200, imageLayer2.bounds.size.width, imageLayer2.bounds.size.height);
+    ////    CGAffineTransformRotate(CGAffineTransform t, <#CGFloat angle#>)
+    ////    CGAffineTransformMakeRotation(intVal);
+    //    [vaLayer addSublayer:line];
+    //    [vaLayer addSublayer:imageLayer2];
+    //
+    ////    self.vaView =[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width,self.view.bounds.size.height)];
+    ////    [self.view addSubview:self.vaView];
+    //
+    ////    [self.view insertSubview:self.vaView atIndex:5];
+    ////    [self.view bringSubviewToFront:self.player.view];
+    //
     
     [self parseRoiInfo];
+    [self parseSensorInfo];
 }
 
 
 // 파라미터의 ROI json 객체로 Polygon Layer를 생성한다.
 - (void)drawPolygon:(NSDictionary*) jsonObject{
+    
+    NSLog(@"drawPolygon : inputDta :%@" , jsonObject );
     CAShapeLayer * imageLayer = [CAShapeLayer layer];
     UIBezierPath *path = [[UIBezierPath alloc] init];
     
-    NSMutableArray *array = [jsonObject objectForKey:@"#roi_coord"];
+    NSString *roiType = [jsonObject objectForKey:@"roi_type"];
+    NSLog(@"roi_type....%@",roiType );
     
-    int i = 0;
-    for(id pt in array){
+    NSMutableArray * arry =[jsonObject objectForKey:@"roi_coord"];
+    NSLog(@"draw polygon....%@",arry );
+    
+    
+    NSArray *array = [jsonObject objectForKey:@"roi_coord"];
+    NSLog(@"draw polygon....%@",array );
+    
+    
+    for(int n = 0; n <[array count]; n++){
         
-        NSString *x = [pt objectForKey:@"#x"];
-        NSString *y = [pt objectForKey:@"#y"];
-        if(i == 0){
+        NSDictionary *pt = [array objectAtIndex:n];
+        
+        NSLog(@">>>>>%@", pt );
+        
+        NSString *x = [pt objectForKey:@"x"];
+        NSString *y = [pt objectForKey:@"y"];
+        NSLog(@"data : x :%@, y :%@" , x, y );
+        if(n == 0){
             [path moveToPoint:CGPointMake([x floatValue]/self.screenWidth/100000, [y floatValue]/self.screenHeight/100000)];
         }else{
             [path addLineToPoint:CGPointMake([x floatValue]/self.screenWidth/100000, [y floatValue]/self.screenHeight/100000)];
         }
+        
     }
-    
-    NSString *roiType = [jsonObject objectForKey:@"#roi_type"];
     
     if([roiType isEqualToString:@"21" ] ){
         [[UIColor colorWithRGBHex:(0x36B255)] setFill];
@@ -241,9 +274,14 @@
     }else{
         [[UIColor colorWithRGBHex:(0x36B255)] setFill];
     }
-//  ROI 색상 설정
-//    [[UIColor colorWithRed:(248/255.0) green:(222/255.0) blue:(173/255.0) alpha:1.0] setFill];
+    
+    NSLog(@"색 변경" );
+    
+    //  ROI 색상 설정
+    //    [[UIColor colorWithRed:(248/255.0) green:(222/255.0) blue:(173/255.0) alpha:1.0] setFill];
     [path fill];
+    NSLog(@"라인 색 변경" );
+    
     [[UIColor redColor] setStroke];
     [path stroke];
     
@@ -251,8 +289,11 @@
     imageLayer.lineWidth = 3;
     imageLayer.path = path.CGPath;
     imageLayer.strokeColor = [UIColor redColor].CGColor;
+    NSLog(@"vaLayer 에 추가" );
     
     [self.vaLayer addSublayer:imageLayer];
+    NSLog(@"완료" );
+    
 }
 
 static CGFloat DegreesToRadians(CGFloat degrees) {return degrees * M_PI / 180;}
@@ -289,39 +330,99 @@ static CGFloat RadiansToDegrees(CGFloat radians) {return radians * 180/M_PI;}
     
     NSLog(@"data : sendDta :%@" , self.roiInfo );
     
-    NSData *jsonData = [self.roiInfo dataUsingEncoding:NSUTF8StringEncoding];
+    //    NSData *jsonData = [self.roiInfo dataUsingEncoding:NSUTF8StringEncoding];
+    NSMutableArray *jsonData = self.roiInfo;
+    //    NSError * error;
     
-    NSError * error;
+    //    id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+    //    if(error){
+    //        NSLog(@"Error parsing JSON : %@",jsonData);
+    //    }else{
+    //        if([jsonObject isKindOfClass:[NSArray class]]){
+    //            NSLog(@"type : array!");
+    //            NSArray * jsonArray =(NSArray *)jsonObject;
+    NSArray * jsonArray =(NSArray *)jsonData;
+    NSLog(@"jsonArray - %@", self.roiInfo);
     
-    id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
-    if(error){
-        NSLog(@"Error parsing JSON : %@",jsonData);
-    }else{
-        if([jsonObject isKindOfClass:[NSArray class]]){
-            NSLog(@"type : array!");
-            NSArray * jsonArray =(NSArray *)jsonObject;
-            NSLog(@"jsonArray - %@", jsonArray);
+    for(id rois in jsonArray){
+        NSString * roiType = [rois objectForKey:@"roi_type"];
+        if([roiType isEqualToString:@"11" ] || [roiType isEqualToString:@"12"] || [roiType isEqualToString:@"13"]||
+           [roiType isEqualToString:@"14" ] || [roiType isEqualToString:@"15" ] || [roiType isEqualToString:@"16" ] ||
+           [roiType isEqualToString:@"18" ] || [roiType isEqualToString:@"19" ] || [roiType isEqualToString:@"102" ]){
+            //         Line그리기
             
-//            for(id rois in jsonArray){
-//                [self drawPolygon : rois];
-////                CAShapeLayer * imageLayer2 = [CAShapeLayer layer];
-////                UIBezierPath *path1 = [[UIBezierPath alloc] init];
-////                [path1 moveToPoint:CGPointMake(0, 50)];
-////                [path1 addLineToPoint:CGPointMake(200, 50)];
-////                imageLayer2.lineWidth = 3;
-////                imageLayer2.path = path1.CGPath;
-////                imageLayer2.strokeColor = [UIColor redColor].CGColor;
-////
-////                NSMutableDictionary *map = [NSMutableDictionary dictionary];
-//////                map[@1]
-//            }
         }else{
-            NSLog(@"type : dictionary!");
-            NSDictionary * jsonDictionary =(NSDictionary *)jsonObject;
-            NSLog(@"jsonArray - %@", jsonDictionary);
+            //        영역그리기
+            [self drawPolygon : rois];
         }
+        
+        
+        //                if()
+        
+        //                CAShapeLayer * imageLayer2 = [CAShapeLayer layer];
+        //                UIBezierPath *path1 = [[UIBezierPath alloc] init];
+        //                [path1 moveToPoint:CGPointMake(0, 50)];
+        //                [path1 addLineToPoint:CGPointMake(200, 50)];
+        //                imageLayer2.lineWidth = 3;
+        //                imageLayer2.path = path1.CGPath;
+        //                imageLayer2.strokeColor = [UIColor redColor].CGColor;
+        //
+        //                NSMutableDictionary *map = [NSMutableDictionary dictionary];
+        ////                map[@1]
     }
+    //        }else{
+    //            NSLog(@"type : dictionary!");
+    //            NSDictionary * jsonDictionary =(NSDictionary *)jsonObject;
+    //            NSLog(@"jsonArray - %@", jsonDictionary);
+    //        }
+    //    }
 }
+
+-(void) parseSensorInfo{
+    BOOL enableShow = NO;
+    if(![self isObjectnull : self.sensorInfo]){
+        NSString * sampleStr = [self.sensorInfo componentsJoinedByString:@" "];
+        NSLog(@"Parising %@", sampleStr);
+        
+       NSArray * jsonArray =self.sensorInfo;;
+        NSLog(@"jsonArray - %@", self.sensorInfo);
+    
+    
+    
+    for(id iots in jsonArray){
+        NSString * sensorTagCd = [iots objectForKey:@"sensor_tag_cd"];
+        NSLog(@"parsing tagCd - %@", sensorTagCd);
+        UIImage* il;
+        if([sensorTagCd isEqualToString:@"10001" ]){
+            il = motion;
+        }else if([sensorTagCd isEqualToString:@"10002" ]){
+            il = door;
+        }else if([sensorTagCd isEqualToString:@"10003" ]){
+            il = sound;
+        }else if([sensorTagCd isEqualToString:@"10004" ]){
+            il = humidity;
+        }else if([sensorTagCd isEqualToString:@"10005" ]){
+            il = temperature;
+        }else if([sensorTagCd isEqualToString:@"10006" ]){
+            il = fire;
+        }
+        CGFloat location_x = [[iots objectForKey:@"location_x"] floatValue] ;
+        CGFloat location_y = [[iots objectForKey:@"location_y"] floatValue] ;
+         NSLog(@"parsing x : %f, y : %f",  location_x, location_y);
+        CALayer * imageLayer = [CALayer layer];
+        imageLayer.frame = CGRectMake(location_x, location_y, 100, 100);
+        imageLayer.opacity = 0.65;
+        imageLayer.contents = (id)il.CGImage;
+        NSLog(@"parsing add image to iotLayer");
+        
+        [self.iotLayer addSublayer:imageLayer];
+        enableShow = YES;
+    }
+    }
+    NSLog(@"parsing show iot button >>>>%d", enableShow);
+     self.iotButton.hidden = enableShow;
+}
+
 
 -(UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window{
     if (self.shouldRotate)
@@ -332,14 +433,14 @@ static CGFloat RadiansToDegrees(CGFloat radians) {return radians * 180/M_PI;}
 
 - (void) hiddenBar{
     [self.navigationBar setHidden:isHidden];
-
+    
 }
 
 // 즐겨찾기 상태값 변경
 - (void)changeFavorites{
     NSString * diff = @"Y";
     NSLog(@"즐겨찾기 상태값 변경(AsIs) : %@", self.isFavorites);
-
+    
     if([diff isEqualToString:self.isFavorites]){
         self.isFavorites = @"N";
     }else{
@@ -364,19 +465,62 @@ static CGFloat RadiansToDegrees(CGFloat radians) {return radians * 180/M_PI;}
     self.favoritesButton.selected = enableFavorites;
 }
 
+//VA버튼 클릭
+- (IBAction)toggleVa:(id)sender
+{
+    [self.vaButton setImage:[UIImage imageNamed:@"ico_va_off.png"] forState:UIControlStateNormal];
+    [self.vaButton setImage:[UIImage imageNamed:@"ico_va.png"] forState:UIControlStateSelected];
+    
+    enableVA = !enableVA;
+    
+    self.vaButton.selected = enableVA;
+    
+    if(enableVA){
+        [self.view.layer addSublayer:self.vaLayer];
+    }else{
+        [self.vaLayer removeFromSuperlayer];
+    }
+}
+
+//IOT 버틀 클릭
+- (IBAction)toggleIoT:(id)sender
+{
+    NSLog(@"즐겨찾기 상태값 변경(AsIs) : %@", self.isFavorites);
+    [self.iotButton setImage:[UIImage imageNamed:@"ico_widget6_off.png"] forState:UIControlStateNormal];
+    [self.iotButton setImage:[UIImage imageNamed:@"ico_widget6.png"] forState:UIControlStateSelected];
+    
+    enableIot = !enableIot;
+    
+    self.iotButton.selected = enableIot;
+    
+    if(enableIot){
+        [self.view.layer addSublayer:self.iotLayer];
+    }else{
+        [self.iotLayer removeFromSuperlayer];
+    }
+}
+
+
+
 // 저장상태 여부 표시
 - (void)drawRecordStatus{
-    [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraoff.png"] forState:UIControlStateDisabled];
-    [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraon.png"] forState:UIControlStateNormal];
+    [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraON.png"] forState:UIControlStateNormal];
+    [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraon.png"] forState:UIControlStateSelected];
+    [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraOff.png"] forState:UIControlStateDisabled];
     
     
     NSString * diff = @"Y";
+    NSString * err = @"Z";
+
     
     if([diff isEqualToString:self.recordStatus]){
-        enableRecord = YES;
+        self.recordStateButton.selected = true;
+    }else if([err isEqualToString:self.recordStatus]){
+        self.recordStateButton.enabled = false;
+    }else{
+        self.recordStateButton.selected = false;
     }
-    
-    self.recordStateButton.enabled = enableRecord;
+
 }
 
 
@@ -393,7 +537,7 @@ static CGFloat RadiansToDegrees(CGFloat radians) {return radians * 180/M_PI;}
 -(void) viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [opQueue addOperationWithBlock:^{
-
+        
     }];
 }
 
@@ -546,8 +690,8 @@ static CGFloat RadiansToDegrees(CGFloat radians) {return radians * 180/M_PI;}
 //즐겨찾기
 - (IBAction)setFavorites:(id)sender
 {
-       NSLog(@"즐겨찾기 상태값 변경(AsIs) : %@", self.isFavorites);
-
+    NSLog(@"즐겨찾기 상태값 변경(AsIs) : %@", self.isFavorites);
+    
     self.favoritesButton.selected = !self.favoritesButton.selected;
     if(self.favoritesButton.selected){
         self.isFavorites = @"Y";
@@ -563,7 +707,7 @@ static CGFloat RadiansToDegrees(CGFloat radians) {return radians * 180/M_PI;}
         pluginResult.keepCallback = [NSNumber numberWithBool:YES];
         [self.origem.commandDelegate sendPluginResult:pluginResult callbackId:self.origem.lastCommand.callbackId];
     }];
-
+    
 }
 
 //SnapShot 썸네일 저장하기
@@ -571,7 +715,14 @@ static CGFloat RadiansToDegrees(CGFloat radians) {return radians * 180/M_PI;}
     SGPLFImage *snapshot = self.player.snapshot;
     UIImageWriteToSavedPhotosAlbum(snapshot,nil, nil, nil);
     NSLog(@"The image: %@", snapshot);
+    
+}
 
+-(BOOL) isObjectnull:(id )value{
+    if([value isEqual:[NSNull null] ] || !value){
+        return YES;
+    }
+    return NO;
 }
 
 @end

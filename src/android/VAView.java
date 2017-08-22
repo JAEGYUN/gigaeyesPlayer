@@ -37,7 +37,7 @@ public class VAView extends View {
             // 라인대신 이미지로 대체
             Bitmap dimg;
             if(type == 11 || type == 14 || type == 18 || type == 102){               // In
-                dimg = lineLeft;
+                dimg = lineIn;
             }else if(type == 12 || type == 15 || type == 19){         // Out
                 dimg = lineOut;
             }else {
@@ -92,11 +92,18 @@ public class VAView extends View {
 
             }
 
-            cv.drawLine(p1.x, p1.y, p2.x, p2.y, pa);
+//            cv.drawLine(p1.x, p1.y, p2.x, p2.y, pa);
 
 
             Log.d(TAG, "distance::"+distance+", to Int:"+(int)distance);
             Log.d(TAG, "degree::"+degree+", to Int:"+(int)degree);
+            /** 가로(distance)를 기준으로 Resize */
+            double aspectRatio = (double) dimg.getHeight() / (double) dimg.getWidth();
+            int targetHeight = (int) (distance*aspectRatio);
+            
+            dimg = Bitmap.createScaledBitmap(dimg, (int)distance, targetHeight, false);
+
+
             Matrix matrix = new Matrix();
             matrix.postRotate((float)degree);
             matrix.postTranslate(x1, y1);
