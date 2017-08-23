@@ -42,7 +42,7 @@
                                     <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="QfV-VE-ye9" userLabel="back Button">
                                         <rect key="frame" x="20" y="11" width="16" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="btn_back2.png"/>
+                                        <state key="normal" image="btn_back1.png"/>
                                         <connections>
                                             <action selector="back:" destination="-1" eventType="touchUpInside" id="UCn-gM-B3d"/>
                                         </connections>
