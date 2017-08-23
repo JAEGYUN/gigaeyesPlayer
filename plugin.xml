@@ -18,7 +18,6 @@
       <source-file src="src/ios/PlayerViewController.m" />
       <resource-file src="src/ios/PlayerViewController.xib" />
       <resource-file src="src/ios/res/btn_back1.png" />
-      <resource-file src="src/ios/res/btn_back1.png" />
       <resource-file src="src/ios/res/ico_arrow_left.png"  />
       <resource-file src="src/ios/res/ico_arrow_leftright.png"  />
       <resource-file src="src/ios/res/ico_arrow_right.png"  />
