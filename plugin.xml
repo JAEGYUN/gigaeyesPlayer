@@ -40,6 +40,7 @@
       <resource-file src="src/ios/res/ico_va_off.png" />
       <resource-file src="src/ios/res/ico_iot_off.png" />
       <resource-file src="src/ios/res/images.png" />
+      <resource-file src="src/ios/res/ico_cameraoff__.png" />
       <framework src="libiconv.tbd" />
       <framework src="libz.tbd" />
       <framework src="libbz2.tbd" />
@@ -93,6 +94,7 @@
       <source-file src="src/android/res/drawable/ico_va_off.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_iot_off.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/images.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_cameraoff__.png" target-dir="res/drawable"  />
       <source-file src="src/android/res/raw/loading.gif" target-dir="res/raw" />
       <source-file src="src/android/res/drawable/starbutton.xml" target-dir="res/drawable" />
       <source-file src="src/android/res/layout/gigaeyes_activity_main.xml" target-dir="res/layout" />
