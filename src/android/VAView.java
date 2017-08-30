@@ -10,6 +10,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 
 import android.view.View;
 
@@ -37,14 +38,18 @@ public class VAView extends View {
             // 라인대신 이미지로 대체
             Bitmap dimg;
             if(type == 11 || type == 14 || type == 18 || type == 102){               // In
-                dimg = lineIn;
+//                dimg = lineIn;
+                dimg = lineLeft;
             }else if(type == 12 || type == 15 || type == 19){         // Out
-                dimg = lineOut;
+//                dimg = lineOut;
+                dimg = lineRight;
             }else {
-                dimg = lineInOut;
+//                dimg = lineInOut;
+                dimg = lineLeftRight;
             }
             Point p1 = points.get(0);
             Point p2 = points.get(1);
+
             double theta = Math.atan2((p2.y - p1.y), (p2.x - p1.x));
             double degree = (theta*180)/Math.PI;
 //          두점 사이의 길이 계산 --> 이미지 사이즈 변경기준
@@ -56,57 +61,39 @@ public class VAView extends View {
             double z = degree / 90+1; // 1,2,-1,-2
             double a = degree % 90;
             double buf = 20 - (20/90*a);
-            int x1 = p1.x+(p2.x-p1.x)/2;
-            int y1 = p1.y+(p2.y-p1.y)/2;
+            int x1 = p1.x+((p2.x-p1.x)/2);
+            int y1 = p1.y+((p2.y-p1.y)/2);
 
-//          기울기 및 좌표계에 따라 가운데 화살표 위치 변경
-            if(Math.abs(degree)>=0 && Math.abs(degree)<90){
-
-                if(Math.abs(degree)>0){
-                    x1 = x1 - (int)buf;
-                    y1 = y1 - (int)buf;
-                 }else{
-                    y1 = y1 - (int)buf;
-                }
+            Log.d(TAG,"LINE>>>>x1:"+x1+", y1:"+y1);
 
 
-            }else{
 
-                if(Math.abs(degree) > 90){
-                    y1 = y1 + (int) buf;
-                    if(z>0){
-                        x1 = x1 +(int)buf;
-                    }else{
-                        x1 = x1 -(int)buf;
-                    }
-
-                }else if(Math.abs(degree) == 180){
-                    y1 = y1 + (int) buf;
-                }else{
-                    if(z > 0){
-                        x1 = x1 + (int)buf;
-                    }else{
-                        x1 = x1 - (int)buf;
-                    }
-                }
-
-            }
-
-//            cv.drawLine(p1.x, p1.y, p2.x, p2.y, pa);
+            cv.drawLine(p1.x, p1.y, p2.x, p2.y, pa);
 
 
             Log.d(TAG, "distance::"+distance+", to Int:"+(int)distance);
             Log.d(TAG, "degree::"+degree+", to Int:"+(int)degree);
-            /** 가로(distance)를 기준으로 Resize */
-            double aspectRatio = (double) dimg.getHeight() / (double) dimg.getWidth();
-            int targetHeight = (int) (distance*aspectRatio);
-            
-            dimg = Bitmap.createScaledBitmap(dimg, (int)distance, targetHeight, false);
+
+//            가운데 화살표 그리기
+//            double aspectRatio = (double) dimg.getHeight() / (double) dimg.getWidth();
+//            int targetHeight = (int) (distance*aspectRatio);
+
+//            dimg = Bitmap.createScaledBitmap(dimg, (int)distance, targetHeight, false);
 
 
+            float[] matrixValue = new float[9];
             Matrix matrix = new Matrix();
-            matrix.postRotate((float)degree);
-            matrix.postTranslate(x1, y1);
+            matrix.postTranslate(x1 - dimg.getWidth()/2, y1 - dimg.getHeight()/2);
+//  Matrix로 rotate 하는 경우 중심축이 변경이 됨. 먼저 중심축 좌표를 추출 한 뒤 rotate 후 다시 중심축 좌표를 설정해야 가운데로 유지가 됨
+            matrix.getValues(matrixValue);
+
+            float center_x = matrixValue[Matrix.MTRANS_X] + (dimg.getWidth()/2);
+            float center_y = matrixValue[Matrix.MTRANS_Y] + (dimg.getHeight()/2);
+
+            matrix.postRotate((float)degree, center_x, center_y);
+
+//            dimg = Bitmap.createBitmap(dimg, 0,0, dimg.getWidth(), dimg.getHeight(), matrix, false);
+
 
             cv.drawBitmap(dimg,matrix,null);
         }

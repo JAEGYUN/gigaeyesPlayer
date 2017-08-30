@@ -264,13 +264,17 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
                             roiValue.type == 14 || roiValue.type == 15 || roiValue.type == 16 ||
                             roiValue.type == 18 || roiValue.type == 19 || roiValue.type == 102 ){
                         ArrayList<Point> pts = new ArrayList<Point>();
-
+                        Log.d(TAG,"LINE>>>>"+roiValue.type+"-----");
                         for(Point pt : roiValue.coord){
                             int x = fullWidth * pt.x / 100000;
                             int y = fullHeight * pt.y / 100000;
+                            Log.d(TAG,"LINE>>>>p.x:"+pt.x+"....."+x);
+                            Log.d(TAG,"LINE>>>>p.y:"+pt.y+"....."+y);
                             Point p = new Point(x, y);
                             pts.add(p);
                         }
+
+
                         vaView.pushLine(roiValue.type,  pts);
                     }else if(roiValue.type == 21 || roiValue.type == 22 || roiValue.type == 23 ||         // draw poligon
                             roiValue.type == 24 || roiValue.type == 25 || roiValue.type == 26 ||
@@ -288,8 +292,9 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
                         vaView.pushPolygon(roiValue.type,  pts);
                     }
                 }
-                vaViewFlag = true;
+//                vaViewFlag = true;
             }
+            vaView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -320,7 +325,7 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
 
                 for (ROI_OBJ roiValue : ROI_INFO) {
                     if (roiValue.type == 10001 || roiValue.type == 10002 || roiValue.type == 10003 ||
-                            roiValue.type == 10004 || roiValue.type == 10005 || roiValue.type == 10006) {
+                            roiValue.type == 10004 || roiValue.type == 10005 || roiValue.type == 10006 || roiValue.type == 10007) {
                         ImageView ivg = new ImageView(this);
                         ActionBar.LayoutParams params = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         for (Point pt : roiValue.coord) {
@@ -346,12 +351,13 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
                             } else {
                                 Log.d(TAG,"요청유형의 센서는 지원되지 않습니다. ["+roiValue.type+"]");
                             }
+                            ivg.setVisibility(View.INVISIBLE);
                             iotLayer.addView(ivg);
                         }
                         imgViews.add(ivg);
                     }
                 }
-                iotViewFlag = true;
+//                iotViewFlag = true;
             }
         }
     }

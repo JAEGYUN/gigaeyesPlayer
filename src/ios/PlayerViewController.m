@@ -7,6 +7,7 @@
     BOOL isHidden;
     BOOL enableFavorites;
     BOOL enableRecord;
+    BOOL isErr;
     BOOL enableIot;
     BOOL enableVA;
     BOOL isSchedule;
@@ -16,6 +17,7 @@
     UIImage *motion;
     UIImage *temperature;
     UIImage *humidity;
+    UIImage *gas;
     UIActivityIndicatorView *spinner;
     NSOperationQueue *opQueue;
 }
@@ -65,6 +67,8 @@
     fire = [UIImage imageNamed:@"ico_fire.png"];
     temperature = [UIImage imageNamed:@"ico_temperature.png"];
     humidity = [UIImage imageNamed:@"ico_humidity.png"];
+    gas =  [UIImage imageNamed:@"ico_gas.png"];
+
 
     // 플레이어 호출 부분
     self.view.backgroundColor = [UIColor blackColor];
@@ -103,6 +107,7 @@
     // 플레이어 디코더 선택...AVPlayer와 FFmepgDecoder 또는 모두 사용가능하나 FFmpeg을 사용하도록 설정
     self.player.decoder =  [SGPlayerDecoder decoderByFFmpeg];
     //    self.player.decoder =  [SGPlayerDecoder decoderByDefault];
+    [self.player.decoder setFFmpegCodecContextOptionStringValue :@"1000" forKey:@"probesize"];
     [self.player.decoder setFFmpegCodecContextOptionStringValue :@"tcp" forKey:@"rtsp_transport"];
     [self.player.decoder setFFmpegCodecContextOptionStringValue :@"prefer_tcp" forKey:@"rtsp_flags"];
     [self.player.decoder setFFmpegCodecContextOptionStringValue :@"0" forKey:@"timeout"];
@@ -504,9 +509,9 @@ static CGFloat RadiansToDegrees(CGFloat radians) {return radians * 180/M_PI;}
 
 // 저장상태 여부 표시
 - (void)drawRecordStatus{
-    [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraON.png"] forState:UIControlStateNormal];
+    [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraoff.png"] forState:UIControlStateNormal];
     [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraon.png"] forState:UIControlStateSelected];
-    [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraOff.png"] forState:UIControlStateDisabled];
+    [self.recordStateButton setImage:[UIImage imageNamed:@"ico_cameraoff__.png"] forState:UIControlStateDisabled];
     
     
     NSString * diff = @"Y";

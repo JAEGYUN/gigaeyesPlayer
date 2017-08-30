@@ -5,8 +5,8 @@ public class GigaeyesConstants {
     public static final String FAVORITES_OFF = "N";
     public static final String STREAM_VALID_STATUS = "Y";
     public static final String STREAM_INVALID_STATUS_ = "N";
-    public static final String STATUS_SUCCESS = "S";
-    public static final String STATUS_FAIL = "F";
+    public static final String STATUS_SUCCESS = "Y";
+    public static final String STATUS_SCHEDULE = "N";
     public static final String STATUS_EXCEPTION = "Z";
     public static final String ID = "id";
     public static final String LAYOUT = "layout";
@@ -20,6 +20,7 @@ public class GigaeyesConstants {
         public static final String ICO_ARROW_LEFT_RIGHT = "ico_arrow_leftright";
         public static final String ICO_ARROW_RIGHT = "ico_arrow_right";
         public static final String ICO_CAMERA_OFF = "ico_cameraoff";
+        public static final String ICO_CAMERA_ERR = "ico_cameraoff__";
         public static final String ICO_CAMERA_ON = "ico_cameraon";
         public static final String ICO_CAPTURE = "ico_capture";
         public static final String ICO_DOOR = "ico_door";
@@ -35,6 +36,7 @@ public class GigaeyesConstants {
         public static final String ICO_STAR_OFF = "ico_star_off";
         public static final String ICO_TEMPERATURE = "ico_temperature";
         public static final String ICO_THEFT = "ico_theft";
+        public static final String ICO_GAS = "ico_gas";
         public static final String ICO_VA = "ico_va";
         public static final String ICO_VA_OFF = "ico_va_off";
 

@@ -26,6 +26,7 @@
       <resource-file src="src/ios/res/ico_capture.png" />
       <resource-file src="src/ios/res/ico_door.png"  />
       <resource-file src="src/ios/res/ico_fire.png" />
+      <resource-file src="src/ios/res/ico_gas.png" />
       <resource-file src="src/ios/res/ico_humidity.png" />
       <resource-file src="src/ios/res/ico_iot.png" />
       <resource-file src="src/ios/res/ico_red_in.png" />
@@ -80,6 +81,7 @@
       <source-file src="src/android/res/drawable/ico_capture.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_door.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_fire.png" target-dir="res/drawable" />
+      <source-file src="src/android/res/drawable/ico_gas.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_humidity.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_iot.png" target-dir="res/drawable" />
       <source-file src="src/android/res/drawable/ico_red_in.png" target-dir="res/drawable" />
