@@ -149,7 +149,9 @@ public class GigaeyesPlayerActivity extends Activity implements IVLCVout.Callbac
             finishWithError();
         }
 
-
+//      초기화....
+        this.iotViewFlag = false;
+        this.vaViewFlag = false;
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
