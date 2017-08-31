@@ -177,7 +177,8 @@
 //    NSLog(@"drawPolygon : inputDta :%@" , jsonObject );
     CAShapeLayer * imageLayer = [CAShapeLayer layer];
     UIBezierPath *path = [[UIBezierPath alloc] init];
-    UIColor *fillColor = [UIColor colorWithRed:(54/255.0) green:(178/255.0) blue:(85/255.0) alpha:0.5];
+    UIColor *fillColor = [UIColor colorWithRed:(54/255.0) green:(178/255.0) blue:(85/255.0) alpha:0.1];
+    UIColor *strokeColor = [UIColor redColor];
     NSString *roiType = [jsonObject objectForKey:@"roi_type"];
     NSLog(@"roi_type....%@",roiType );
     
@@ -235,7 +236,8 @@
 
     }else{
 
-        fillColor = [UIColor colorWithRed:(54/255.0) green:(178/255.0) blue:(85/255.0) alpha:0.5];
+        fillColor = [UIColor colorWithRed:(54/255.0) green:(178/255.0) blue:(85/255.0) alpha:0.1];
+        strokeColor = [UIColor yellowColor];
         NSLog(@"UIColor>>>default. #36B255");
 
     }
@@ -258,7 +260,7 @@
  //   레퍼런스의  [ path fill ] [path stroke] 등은 적용이 안됨.
     imageLayer.path = path.CGPath;
     imageLayer.fillColor = fillColor.CGColor;
-    imageLayer.strokeColor = [UIColor redColor].CGColor;
+    imageLayer.strokeColor = strokeColor.CGColor;
     NSLog(@"vaLayer 에 추가" );
     
     [self.vaLayer addSublayer:imageLayer];
