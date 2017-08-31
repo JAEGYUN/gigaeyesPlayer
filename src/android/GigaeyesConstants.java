@@ -20,7 +20,7 @@ public class GigaeyesConstants {
         public static final String ICO_ARROW_LEFT_RIGHT = "ico_arrow_leftright";
         public static final String ICO_ARROW_RIGHT = "ico_arrow_right";
         public static final String ICO_CAMERA_OFF = "ico_cameraoff";
-        public static final String ICO_CAMERA_ERR = "ico_cameraoff__";
+        public static final String ICO_CAMERA_ERR = "ico_cameraooff__";
         public static final String ICO_CAMERA_ON = "ico_cameraon";
         public static final String ICO_CAPTURE = "ico_capture";
         public static final String ICO_DOOR = "ico_door";
@@ -71,5 +71,6 @@ public class GigaeyesConstants {
     public static final String BRIGHTNESS_STATUS = "brightStatus";
     public static final String VOLUME_BAR = "volumeBar";
     public static final String VOLUME_STATUS = "volumeStatus";
+    public static final String LOADING_VIEW = "iv";
 
 }
