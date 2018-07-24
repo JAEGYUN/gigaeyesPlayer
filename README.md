@@ -11,7 +11,7 @@ ionic cordova plugin add https://github.com/JAEGYUN/gigaeyesPlayer.git
 
 ## libVLC 지원 (only Android)
 
-## Using
+## Using cccc
 
 ``` javascript
 
